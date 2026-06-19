@@ -1,0 +1,376 @@
+{
+  "drives": {
+    "available": true,
+    "items": [
+      {
+        "filesystem": null,
+        "label": null,
+        "model": "USB3.0",
+        "mountpoints": [],
+        "name": "sda",
+        "parent_disk_name": "sda",
+        "parent_disk_path": "/dev/sda",
+        "parent_name": null,
+        "parent_path": null,
+        "parent_type": null,
+        "path": "/dev/sda",
+        "size": "1.8 TB",
+        "size_bytes": 2000398934016,
+        "type": "disk",
+        "uuid": null
+      },
+      {
+        "filesystem": "ntfs",
+        "label": "Backup",
+        "model": null,
+        "mountpoints": [
+          "/srv/samba/drives/Backup"
+        ],
+        "name": "sda1",
+        "parent_disk_name": "sda",
+        "parent_disk_path": "/dev/sda",
+        "parent_name": "sda",
+        "parent_path": "/dev/sda",
+        "parent_type": "disk",
+        "path": "/dev/sda1",
+        "size": "1.8 TB",
+        "size_bytes": 2000397795328,
+        "type": "part",
+        "uuid": "608F594334CE8B8E"
+      },
+      {
+        "filesystem": null,
+        "label": null,
+        "model": "USB3.0",
+        "mountpoints": [],
+        "name": "sdb",
+        "parent_disk_name": "sdb",
+        "parent_disk_path": "/dev/sdb",
+        "parent_name": null,
+        "parent_path": null,
+        "parent_type": null,
+        "path": "/dev/sdb",
+        "size": "1.8 TB",
+        "size_bytes": 2000398934016,
+        "type": "disk",
+        "uuid": null
+      },
+      {
+        "filesystem": null,
+        "label": null,
+        "model": null,
+        "mountpoints": [],
+        "name": "sdb1",
+        "parent_disk_name": "sdb",
+        "parent_disk_path": "/dev/sdb",
+        "parent_name": "sdb",
+        "parent_path": "/dev/sdb",
+        "parent_type": "disk",
+        "path": "/dev/sdb1",
+        "size": "16.0 MB",
+        "size_bytes": 16759808,
+        "type": "part",
+        "uuid": null
+      },
+      {
+        "filesystem": "ntfs",
+        "label": "Backup 2",
+        "model": null,
+        "mountpoints": [],
+        "name": "sdb2",
+        "parent_disk_name": "sdb",
+        "parent_disk_path": "/dev/sdb",
+        "parent_name": "sdb",
+        "parent_path": "/dev/sdb",
+        "parent_type": "disk",
+        "path": "/dev/sdb2",
+        "size": "1.8 TB",
+        "size_bytes": 2000381018112,
+        "type": "part",
+        "uuid": "BE24BD6924BD2575"
+      },
+      {
+        "filesystem": null,
+        "label": null,
+        "model": "Samsung SSD 960 EVO 500GB",
+        "mountpoints": [],
+        "name": "nvme0n1",
+        "parent_disk_name": "nvme0n1",
+        "parent_disk_path": "/dev/nvme0n1",
+        "parent_name": null,
+        "parent_path": null,
+        "parent_type": null,
+        "path": "/dev/nvme0n1",
+        "size": "465.8 GB",
+        "size_bytes": 500107862016,
+        "type": "disk",
+        "uuid": null
+      },
+      {
+        "filesystem": "vfat",
+        "label": null,
+        "model": null,
+        "mountpoints": [
+          "/boot/efi"
+        ],
+        "name": "nvme0n1p1",
+        "parent_disk_name": "nvme0n1",
+        "parent_disk_path": "/dev/nvme0n1",
+        "parent_name": "nvme0n1",
+        "parent_path": "/dev/nvme0n1",
+        "parent_type": "disk",
+        "path": "/dev/nvme0n1p1",
+        "size": "1.0 GB",
+        "size_bytes": 1127219200,
+        "type": "part",
+        "uuid": "DB1B-C36C"
+      },
+      {
+        "filesystem": "ext4",
+        "label": null,
+        "model": null,
+        "mountpoints": [
+          "/"
+        ],
+        "name": "nvme0n1p2",
+        "parent_disk_name": "nvme0n1",
+        "parent_disk_path": "/dev/nvme0n1",
+        "parent_name": "nvme0n1",
+        "parent_path": "/dev/nvme0n1",
+        "parent_type": "disk",
+        "path": "/dev/nvme0n1p2",
+        "size": "464.7 GB",
+        "size_bytes": 498978521088,
+        "type": "part",
+        "uuid": "e100bd86-3cfd-4e54-990a-72529310bb08"
+      }
+    ],
+    "message": null,
+    "source": "lsblk JSON"
+  },
+  "hostname": {
+    "available": true,
+    "source": "system hostname",
+    "value": "table2"
+  },
+  "internet": {
+    "available": true,
+    "connected": true,
+    "details": [
+      "DNS lookup found 6 address candidate(s) for ubuntu.com.",
+      "HTTPS port 443 accepted a connection."
+    ],
+    "message": "Internet connection found.",
+    "source": "DNS lookup and HTTPS connection to ubuntu.com:443",
+    "status": "connected"
+  },
+  "local_ips": {
+    "available": true,
+    "items": [
+      "10.0.0.179",
+      "2601:644:9285:650:9e69:d3ff:fe40:9d9c",
+      "2601:644:9285:650::3aca"
+    ],
+    "message": null,
+    "source": "hostname -I"
+  },
+  "mounts": {
+    "available": true,
+    "items": [
+      {
+        "fstype": "ext4",
+        "options": "rw,relatime",
+        "source": "/dev/nvme0n1p2",
+        "target": "/"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "rw,nosuid,nodev,size=6340724k,nr_inodes=819200,mode=755,inode64",
+        "source": "tmpfs",
+        "target": "/run"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap",
+        "source": "none",
+        "target": "/run/credentials/systemd-journald.service"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap",
+        "source": "none",
+        "target": "/run/credentials/systemd-resolved.service"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap",
+        "source": "none",
+        "target": "/run/credentials/systemd-networkd.service"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "rw,nosuid,nodev,relatime,size=3170360k,nr_inodes=792590,mode=700,uid=1000,gid=1000,inode64",
+        "source": "tmpfs",
+        "target": "/run/user/1000"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "ro,nosuid,nodev,noexec,relatime,nosymfollow,size=1024k,nr_inodes=1024,mode=700,inode64,noswap",
+        "source": "none",
+        "target": "/run/credentials/getty@tty1.service"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "rw,nosuid,nodev,nr_inodes=1048576,inode64,usrquota",
+        "source": "tmpfs",
+        "target": "/tmp"
+      },
+      {
+        "fstype": "devtmpfs",
+        "options": "rw,nosuid,size=13850756k,nr_inodes=3462689,mode=755,inode64",
+        "source": "devtmpfs",
+        "target": "/dev"
+      },
+      {
+        "fstype": "mqueue",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "mqueue",
+        "target": "/dev/mqueue"
+      },
+      {
+        "fstype": "hugetlbfs",
+        "options": "rw,nosuid,nodev,relatime,pagesize=2M",
+        "source": "hugetlbfs",
+        "target": "/dev/hugepages"
+      },
+      {
+        "fstype": "tmpfs",
+        "options": "rw,nosuid,nodev,inode64,usrquota",
+        "source": "tmpfs",
+        "target": "/dev/shm"
+      },
+      {
+        "fstype": "devpts",
+        "options": "rw,nosuid,noexec,relatime,gid=5,mode=600,ptmxmode=000",
+        "source": "devpts",
+        "target": "/dev/pts"
+      },
+      {
+        "fstype": "sysfs",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "sysfs",
+        "target": "/sys"
+      },
+      {
+        "fstype": "tracefs",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "tracefs",
+        "target": "/sys/kernel/tracing"
+      },
+      {
+        "fstype": "debugfs",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "debugfs",
+        "target": "/sys/kernel/debug"
+      },
+      {
+        "fstype": "fusectl",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "fusectl",
+        "target": "/sys/fs/fuse/connections"
+      },
+      {
+        "fstype": "securityfs",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "securityfs",
+        "target": "/sys/kernel/security"
+      },
+      {
+        "fstype": "cgroup2",
+        "options": "rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot,memory_hugetlb_accounting",
+        "source": "cgroup2",
+        "target": "/sys/fs/cgroup"
+      },
+      {
+        "fstype": "pstore",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "none",
+        "target": "/sys/fs/pstore"
+      },
+      {
+        "fstype": "efivarfs",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "efivarfs",
+        "target": "/sys/firmware/efi/efivars"
+      },
+      {
+        "fstype": "bpf",
+        "options": "rw,nosuid,nodev,noexec,relatime,mode=700",
+        "source": "bpf",
+        "target": "/sys/fs/bpf"
+      },
+      {
+        "fstype": "configfs",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "configfs",
+        "target": "/sys/kernel/config"
+      },
+      {
+        "fstype": "proc",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "proc",
+        "target": "/proc"
+      },
+      {
+        "fstype": "autofs",
+        "options": "rw,relatime,fd=36,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=6633",
+        "source": "systemd-1",
+        "target": "/proc/sys/fs/binfmt_misc"
+      },
+      {
+        "fstype": "binfmt_misc",
+        "options": "rw,nosuid,nodev,noexec,relatime",
+        "source": "binfmt_misc",
+        "target": "/proc/sys/fs/binfmt_misc"
+      },
+      {
+        "fstype": "vfat",
+        "options": "rw,relatime,fmask=0022,dmask=0022,codepage=437,iocharset=iso8859-1,shortname=mixed,errors=remount-ro",
+        "source": "/dev/nvme0n1p1",
+        "target": "/boot/efi"
+      },
+      {
+        "fstype": "fuseblk",
+        "options": "rw,relatime,user_id=0,group_id=0,default_permissions,allow_other,blksize=4096",
+        "source": "/dev/sda1",
+        "target": "/srv/samba/drives/Backup"
+      }
+    ],
+    "message": null,
+    "source": "findmnt JSON"
+  },
+  "os": {
+    "available": true,
+    "id": "ubuntu",
+    "message": null,
+    "name": "Ubuntu",
+    "pretty_name": "Ubuntu 26.04 LTS",
+    "source": "/etc/os-release",
+    "version": "26.04 (Resolute Raccoon)"
+  },
+  "samba": {
+    "active_sessions": [],
+    "available": true,
+    "evidence": [],
+    "installed": false,
+    "message": "Samba was not found. Nothing was installed or changed.",
+    "service_status": "unknown",
+    "setup_message": "Samba was not found. Nothing was installed or changed.",
+    "setup_mode": "initial_setup",
+    "shares": [],
+    "status": "not_found",
+    "user_count": 0,
+    "users": [],
+    "version": null
+  }
+}

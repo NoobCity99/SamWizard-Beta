@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block title %}Server System Check{% endblock %}
+
+{% block content %}
+<b class="lead">
+  This page shows you a list of items SamWizard checks to ensure we can proceed with setting up a SAMBA drive for you.
+  Thus SAMBA
+  should be the ONLY item "NOT FOUND" on this page.
+  <ul>
+    <li class="hint"><b>DO NOT be intimidated by all the jargon, just make sure everything on this list (but SAMBA) is
+        <span style="color: rgb(8, 168, 13);"><strong>GREEN</strong></span>.</b></li>
+    <li class="hint"><i>If internet is NOT connected, we advise connecting via ethernet cord..wifi will work,
+        but long term is NOT ideal
+        for a share drive you want to access frequently.</i></li>
+  </ul>
+</b>
+
+<div class="notice">
+  Some items may show as unavailable on Windows, WSL, or non-Ubuntu systems. Use a real Ubuntu Server system for full
+  setup testing.
+</div>
+
+{% if critical_unresolved %}
+<div class="notice warning-panel">
+  Resolve the critical checks before continuing.
+</div>
+{% endif %}
+
+<section class="check-grid compact-checklist" aria-label="System checks">
+  {% for check in checks %}
+  <article class="check-card check-card-{{ check.status }}">
+    <div class="check-card-header">
+      <div>
+        <p class="check-label">{% if check.critical %}Critical{% else %}Check{% endif %}</p>
+        <h2>{{ check.title }}</h2>
+      </div>
+      <span class="status-badge status-{{ check.status }}">
+        {{ check.status_label }}
+      </span>
+    </div>
+
+    <p class="check-value">{{ check.value }}</p>
+    <p class="check-summary">{{ check.summary }}</p>
+
+    {% if check.details %}
+    <ul class="system-detail-list" aria-label="{{ check.title }} details">
+      {% for detail in check.details %}
+      <li>{{ detail }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% if check.actions %}
+    <div class="actions inline-actions card-actions">
+      {% for action in check.actions %}
+      <a href="{{ action.href }}" class="secondary" {% if action.target %}target="{{ action.target }}" rel="noopener" {%
+        endif %}>{{ action.label }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </article>
+  {% endfor %}
+</section>
+
+{% if not internet_connected %}
+<section class="wifi-panel" aria-labelledby="internet-title">
+  <div>
+    <p class="check-label">Internet troubleshooting</p>
+    <h2 id="internet-title">Connect this server to the internet</h2>
+    <p>
+      Ethernet is usually the simplest choice for a server. Plug in ethernet first, then check again.
+    </p>
+  </div>
+
+  {% if wifi_error %}
+  <div class="error compact-error" role="alert">{{ wifi_error }}</div>
+  {% endif %}
+
+  {% if beta_enabled %}
+  <div class="notice warning-panel">
+    Wi-Fi setup and Netplan editing are disabled during this beta. Connect ethernet or configure Wi-Fi outside
+    SamWizard, then check again.
+  </div>
+  <div class="actions inline-actions">
+    <form method="get" action="/system-check">
+      <button type="submit">OK, I connected ethernet</button>
+    </form>
+  </div>
+  {% else %}
+  <div class="actions inline-actions">
+    <form method="get" action="/system-check">
+      <button type="submit">OK, I connected ethernet</button>
+    </form>
+    <a href="/system-check?wifi=show" class="secondary">Connect Wi-Fi</a>
+  </div>
+
+  {% if show_wifi %}
+  <div class="notice wifi-warning">
+    While Wi-Fi works ok, long term "always on" servers perform better over ethernet.
+  </div>
+
+  <form method="post" action="/system-check/wifi-preview" class="wifi-form">
+    <label class="field">
+      <span>Wi-Fi adapter name</span>
+      <input type="text" name="wifi_interface" value="{{ wifi_state.interface or 'wlan0' }}" autocomplete="off"
+        required>
+    </label>
+    <label class="field">
+      <span>Wi-Fi network name</span>
+      <input type="text" name="wifi_ssid" value="{{ wifi_state.ssid or '' }}" autocomplete="off" required>
+    </label>
+    <label class="field">
+      <span>Wi-Fi password</span>
+      <input type="password" name="wifi_password" autocomplete="current-password" required>
+    </label>
+    <p class="hint">The password is used only to apply Wi-Fi settings. It is not stored.</p>
+    <button type="submit">Connect Wi-Fi</button>
+  </form>
+
+  {% if wifi_results %}
+  <ul class="status-list apply-results" aria-label="Wi-Fi setup results">
+    {% for result in wifi_results %}
+    <li class="result-{{ result.status }}">
+      <span class="check">{{ "OK" if result.status == "passed" else "Stop" }}</span>
+      <span>
+        <strong>{{ result.title }}</strong>
+        <small>{{ result.summary }}</small>
+        {% if result.details %}
+        <span class="result-details">
+          {% for detail in result.details %}
+          <code>{{ detail }}</code>
+          {% endfor %}
+        </span>
+        {% endif %}
+      </span>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  {% endif %}
+  {% endif %}
+</section>
+{% endif %}
+
+<form method="post" action="/system-check" class="actions split">
+  <a href="/" class="secondary">Back</a>
+  <button type="submit">Continue</button>
+</form>
+{% endblock %}

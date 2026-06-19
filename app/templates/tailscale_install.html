@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Install Tailscale{% endblock %}
+
+{% block content %}
+<p class="lead">
+  First, install Tailscale on your Windows PC and sign in. That makes your Windows PC the first approved computer on
+  your private Tailscale network.
+</p>
+
+<div class="summary-panel">
+  <h2>Windows PC first</h2>
+  <p>
+    Open <a href="https://tailscale.com/download" target="_blank" rel="noopener">tailscale.com/download</a>, install
+    Tailscale for Windows, and sign in.
+  </p>
+</div>
+
+{% if tailscale.installed %}
+<div class="notice">
+  Tailscale is already installed on this Ubuntu server. Continue to approve this server in your account.
+</div>
+<div class="actions split">
+  <a href="/tailscale/check" class="secondary">Back</a>
+  <a href="/tailscale/authorize" class="secondary">Approve this server</a>
+</div>
+{% else %}
+<p class="lead">Next, SamWizard will install private remote access support on this Ubuntu server.</p>
+<form method="post" action="/tailscale/install" class="actions split">
+  <a href="/tailscale/check" class="secondary">Back</a>
+  <button type="submit">Install Tailscale on this server</button>
+</form>
+{% endif %}
+
+{% if results %}
+<ul class="status-list apply-results" aria-label="Tailscale install results">
+  {% for result in results %}
+  <li class="result-{{ result.status }}">
+    <span class="check">{{ "OK" if result.status == "passed" else "Stop" }}</span>
+    <span>
+      <strong>{{ result.title }}</strong>
+      <small>{{ result.summary }}</small>
+      {% if result.details %}
+      <span class="result-details">
+        {% for detail in result.details %}
+        <code>{{ detail }}</code>
+        {% endfor %}
+      </span>
+      {% endif %}
+    </span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

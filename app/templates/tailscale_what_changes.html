@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}What Tailscale changes{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Your Samba share is still the same shared folder. Tailscale gives your own devices a private encrypted route back to
+  this server.
+</p>
+
+<div class="address-compare">
+  <div class="connection">
+    <span>At home</span>
+    <code>{{ share.local_path }}</code>
+  </div>
+  <div class="summary-panel">
+    <h2>Same share, different route</h2>
+    <p>The folder did not move. The share did not change. Only the address used to reach it changes.</p>
+  </div>
+</div>
+
+<div class="summary tailscale-flow-visual" aria-label="Tailscale before and after">
+  <div>
+    <strong>Before Tailscale</strong>
+    <p>Windows PC -> Home Router -> Ubuntu Server -> Samba Share</p>
+  </div>
+  <div>
+    <strong>After Tailscale</strong>
+    <p>Windows PC with Tailscale -> Private Tailscale tunnel -> Ubuntu Server -> Same Samba Share</p>
+  </div>
+</div>
+
+<div class="notice">
+  Tailscale does not make your Samba share public. It only lets devices signed into your Tailscale account reach it.
+</div>
+
+<div class="actions split">
+  <a href="/tailscale" class="secondary">Back</a>
+  <a href="/tailscale/check" class="secondary">Check this server</a>
+</div>
+{% endblock %}

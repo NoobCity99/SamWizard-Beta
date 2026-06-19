@@ -1,0 +1,25 @@
+{
+  "app": {
+    "beta_label": "BETA",
+    "build_label": "BETA 0.7.0",
+    "name": "SamWizard",
+    "version": "0.7.0"
+  },
+  "current_step": "Windows PC",
+  "generated_at": "2026-06-17T02:27:56Z",
+  "log_entry_count": 92,
+  "source_route": {
+    "referer": "http://10.0.0.179:8080/beta/diagnostics",
+    "url": "http://10.0.0.179:8080/beta/diagnostics/download"
+  },
+  "system_summary": {
+    "hostname": "table2",
+    "internet": "connected",
+    "local_ips": [
+      "10.0.0.179",
+      "2601:644:9285:650:9e69:d3ff:fe40:9d9c",
+      "2601:644:9285:650::3aca"
+    ],
+    "os": "Ubuntu 26.04 LTS"
+  }
+}

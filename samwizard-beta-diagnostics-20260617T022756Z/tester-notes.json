@@ -1,0 +1,7 @@
+{
+  "actual_result": "Tailscale did not display link needed to authorize server.",
+  "expected_result": "success",
+  "notes": "",
+  "scenario": "set up samba & tailscale",
+  "tester_id": "buck"
+}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Set up your Windows PC{% endblock %}
+
+{% block content %}
+<p class="lead">
+  To use this Samba share away from home, your Windows PC also needs Tailscale and must be signed into the same account.
+</p>
+
+<div class="connection">
+  <span>Tailscale Samba address</span>
+  <code>{{ tailscale_path }}</code>
+</div>
+
+<ol class="instructions">
+  <li>Install Tailscale for Windows.</li>
+  <li>Sign into the same Tailscale account.</li>
+  <li>Make sure Tailscale says Connected.</li>
+  <li>Open File Explorer.</li>
+  <li>Enter the Tailscale Samba address above.</li>
+</ol>
+
+<div class="actions split">
+  <a href="/tailscale/done" class="secondary">Back</a>
+  <a href="/" class="secondary">Return home</a>
+</div>
+{% endblock %}

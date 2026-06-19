@@ -1,0 +1,9 @@
+{
+  "backend_state": "not_installed",
+  "connected": false,
+  "installed": false,
+  "ipv4": null,
+  "logged_in": false,
+  "message": "Tailscale is not installed yet.",
+  "service_status": "not_installed"
+}

@@ -1,0 +1,15 @@
+{
+  "active_sessions": [],
+  "available": true,
+  "evidence": [],
+  "installed": false,
+  "message": "Samba was not found. Nothing was installed or changed.",
+  "service_status": "unknown",
+  "setup_message": "Samba was not found. Nothing was installed or changed.",
+  "setup_mode": "initial_setup",
+  "shares": [],
+  "status": "not_found",
+  "user_count": 0,
+  "users": [],
+  "version": null
+}

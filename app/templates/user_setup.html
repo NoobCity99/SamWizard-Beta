@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Create private access{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Choose the username, Windows will ask for this when you try to access your drive.
+</p>
+<form method="post" action="/user-setup">
+  <label class="field">
+    <span>Username</span>
+    <input type="text" name="username" value="{{ state.username or 'sambauser' }}" autocomplete="username" required>
+  </label>
+  <p class="hint">You will enter the password on the Apply step so it is not stored in this browser session.</p>
+  <div class="actions split">
+    <a href="/share-name" class="secondary">Back</a>
+    <button type="submit">Review setup</button>
+  </div>
+</form>
+{% endblock %}

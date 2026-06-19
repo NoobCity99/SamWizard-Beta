@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Choose your SHARE DRIVE{% endblock %}
+
+{% block content %}
+<p class="text">
+<ul>
+  <li> Pick the external or additional drive that should become available from your Windows computer.</li>
+  <li><b>If you're not sure WHICH of these drives is the one you want, unplug the external drive you want to use, hit
+      the "BACK" button and look here again, the missing drive is the one you want.</b></li>
+  </p>
+</ul>
+{% if not has_eligible_drive %}
+<div class="notice">
+  No share-ready external or additional drive was found. Connect a drive, then refresh this page. The server's operating
+  system drive is intentionally ignored.
+</div>
+{% endif %}
+{% if has_eligible_drive %}
+<form method="post" action="/drive-selection">
+  <fieldset class="choices">
+    <legend class="sr-only">Available external and additional drives</legend>
+    {% for location in locations %}
+    <label class="choice">
+      <input type="radio" name="location_id" value="{{ location.id }}" {% if state.location_id==location.id %}checked{%
+        endif %}>
+      <span>
+        <strong>{{ location.name }}</strong>
+        <small>{{ location.description }}</small>
+      </span>
+    </label>
+    {% endfor %}
+  </fieldset>
+  <fieldset class="choices access-choices">
+    <legend>External drive access</legend>
+    <label class="choice">
+      <input type="radio" name="mount_access" value="read_write" {% if state.mount_access !="read_only" %}checked{%
+        endif %}>
+      <span>
+        <strong>Read/write</strong>
+        <small>Let Windows users open existing files and copy new files to the drive.</small>
+      </span>
+    </label>
+    <label class="choice">
+      <input type="radio" name="mount_access" value="read_only" {% if state.mount_access=="read_only" %}checked{% endif
+        %}>
+      <span>
+        <strong>Read-only</strong>
+        <small>Let Windows users view and copy files without changing the drive.</small>
+      </span>
+    </label>
+  </fieldset>
+  <div class="actions split">
+    <a href="/system-check" class="secondary">Back</a>
+    <button type="submit">Continue</button>
+  </div>
+</form>
+{% else %}
+<div class="actions split">
+  <a href="/system-check" class="secondary">Back</a>
+  <a href="/drive-selection" class="secondary">Refresh drives</a>
+</div>
+{% endif %}
+
+{% if drive_diagnostics %}
+<section class="storage-details" aria-labelledby="storage-details-title">
+  <div>
+    <p class="check-label">Optional details</p>
+    <h2 id="storage-details-title">Detected storage details</h2>
+  </div>
+  <div class="storage-table" role="table" aria-label="Detected storage">
+    <div class="storage-row storage-heading" role="row">
+      <span role="columnheader">Name</span>
+      <span role="columnheader">Details</span>
+      <span role="columnheader">Status</span>
+    </div>
+    {% for item in drive_diagnostics %}
+    <div class="storage-row" role="row">
+      <span role="cell">
+        <strong>{{ item.name }}</strong>
+        <small>{{ item.path }}</small>
+      </span>
+      <span role="cell">
+        <small>{{ item.size }}, type {{ item.type }}, filesystem {{ item.filesystem }}, UUID {{ item.uuid }}, {{
+          item.mountpoints }}</small>
+      </span>
+      <span role="cell">
+        <small>{{ item.reason }}</small>
+      </span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

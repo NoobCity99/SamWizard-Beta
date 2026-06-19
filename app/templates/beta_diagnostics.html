@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beta diagnostics - SamWizard</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+
+<body>
+  {% include "_beta_chrome.html" %}
+  <main class="shell log-shell">
+    <section class="wizard log-page">
+      <header class="wizard-header log-page-header">
+        <p class="eyebrow">SamWizard</p>
+        <p class="beta-build-pill">{{ beta_build_label }}</p>
+        <h1>Beta diagnostics</h1>
+        <p class="lead">
+          Export a redacted diagnostic bundle for beta troubleshooting. Passwords and hidden command input are not
+          included.
+        </p>
+      </header>
+
+      <div class="content">
+        <form method="post" action="/beta/diagnostics/download" class="diagnostics-form">
+          <label class="field">
+            <span>Tester ID or name</span>
+            <input type="text" name="tester_id" autocomplete="name">
+          </label>
+          <label class="field">
+            <span>Test scenario</span>
+            <input type="text" name="scenario" placeholder="Example: first-time Samba setup on Ubuntu Server">
+          </label>
+          <label class="field">
+            <span>Expected result</span>
+            <textarea name="expected_result" rows="3"></textarea>
+          </label>
+          <label class="field">
+            <span>Actual result</span>
+            <textarea name="actual_result" rows="3"></textarea>
+          </label>
+          <label class="field">
+            <span>Notes</span>
+            <textarea name="notes" rows="5"></textarea>
+          </label>
+          <div class="notice">
+            The ZIP includes app version, beta build label, current wizard summary, redacted command log, system
+            detection, drive status, Samba status, Tailscale status, and firewall status.
+          </div>
+          <div class="actions split">
+            <a href="/" class="secondary">Back to SamWizard</a>
+            <button type="submit">Export diagnostic bundle</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

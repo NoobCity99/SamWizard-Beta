@@ -1,0 +1,2 @@
+"""SamWizard Academy feature package."""
+

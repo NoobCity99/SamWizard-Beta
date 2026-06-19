@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Firewall settings{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Firewall settings should protect the server without blocking the private Samba connection you just created.
+</p>
+
+<dl class="facts">
+  <div>
+    <dt>Firewall status</dt>
+    <dd>{{ firewall.ufw_status }}</dd>
+  </div>
+  <div>
+    <dt>Detected home network</dt>
+    <dd>{{ firewall.lan_cidrs | join(", ") if firewall.lan_cidrs else "Not detected" }}</dd>
+  </div>
+  <div>
+    <dt>Tailscale address</dt>
+    <dd>{{ tailscale_ip }}</dd>
+  </div>
+</dl>
+
+<section class="summary-panel" aria-labelledby="firewall-preview-title">
+  <h2 id="firewall-preview-title">What SamWizard will allow</h2>
+  <p>{{ firewall.preview.message }}</p>
+  {% if firewall.preview.rules %}
+  <ul class="system-detail-list">
+    {% for rule in firewall.preview.rules %}
+    <li><strong>{{ rule.title }}:</strong> {{ rule.summary }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</section>
+
+<div class="actions split">
+  <a href="/tailscale/done" class="secondary">Skip firewall for now</a>
+  {% if firewall.preview.can_apply %}
+  <form method="post" action="/tailscale/firewall">
+    <button type="submit">Activate Firewall</button>
+  </form>
+  {% endif %}
+</div>
+
+{% if results %}
+<ul class="status-list apply-results" aria-label="Firewall results">
+  {% for result in results %}
+  <li class="result-{{ result.status }}">
+    <span class="check">{{ "OK" if result.status == "passed" else "Stop" }}</span>
+    <span>
+      <strong>{{ result.title }}</strong>
+      <small>{{ result.summary }}</small>
+      {% if result.details %}
+      <span class="result-details">
+        {% for detail in result.details %}
+        <code>{{ detail }}</code>
+        {% endfor %}
+      </span>
+      {% endif %}
+    </span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}SUCCESS! Your share is ready{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Use this address to access your drive. You can drop it in the file explorer address bar -OR- hit 'Win+R' and drop
+  this address in. <strong>TAP THE <span style="color: orange;">ORANGE</span> COPY ICON TO COPY IT DIRECTLY TO YOUR
+    CLIPBOARD</strong>.
+</p>
+<div class="connection">
+  <span>Windows path</span>
+  <div class="copy-row">
+    <code id="windows-path">{{ windows_path }}</code>
+    <button type="button" class="copy-button" data-copy-target="windows-path" aria-label="Copy Windows path"
+      title="Copy Windows path">
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+        <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+      </svg>
+    </button>
+  </div>
+  <small class="copy-feedback" id="copy-feedback" aria-live="polite"></small>
+</div>
+<ol class="instructions">
+  <li>Open File Explorer on your Windows computer.</li>
+  <li>Click the address bar.</li>
+  <li>Type the path above and sign in with username <strong>{{ state.username or 'sambauser' }}</strong>.</li>
+</ol>
+<div class="notice">
+  <strong><span style="color: aliceblue;">NOTICE:</span></strong><span style="color: red; border: 0cqmax;"><b> UNTIL YOU
+      SET UP TAILSCALE, THIS DRIVE CAN ONLY BE ACCESSED WHILE YOU ARE
+      CONNECTED TO YOUR HOME NETWORK (ie: SAME NETWORK THE SERVER IS ON).</b></span>
+</div>
+<div class="summary-panel">
+  <h2>Want access away from home?</h2>
+  <p>Tailscale can add a private route back to this same Samba share from your own devices.</p>
+  <div class="actions inline-actions">
+    <a href="/tailscale" class="secondary">Set up Tailscale Access</a>
+  </div>
+</div>
+<form method="post" action="/start" class="actions split">
+  <a href="/review" class="secondary">Back to review</a>
+  <button type="submit">Start over</button>
+</form>
+<script>
+  const copyButton = document.querySelector("[data-copy-target]");
+  const copyFeedback = document.getElementById("copy-feedback");
+
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+  }
+
+  if (copyButton) {
+    copyButton.addEventListener("click", async () => {
+      const target = document.getElementById(copyButton.dataset.copyTarget);
+      if (!target) {
+        return;
+      }
+      try {
+        await copyText(target.textContent.trim());
+        copyFeedback.textContent = "Copied";
+        window.setTimeout(() => {
+          copyFeedback.textContent = "";
+        }, 1800);
+      } catch (error) {
+        copyFeedback.textContent = "Copy failed";
+      }
+    });
+  }
+</script>
+{% endblock %}

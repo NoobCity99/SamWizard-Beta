@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Applying your SAMBA setup{% endblock %}
+
+{% block content %}
+<p class="lead">
+  SamWizard is applying the setup. Keep this page open.
+</p>
+
+<section class="progress-panel" aria-labelledby="apply-progress-title">
+  <div class="spinner" aria-hidden="true"></div>
+  <div>
+    <h2 id="apply-progress-title">Apply is running</h2>
+    <p id="apply-status-message">
+      {% if job %}
+      Working on the setup now. Enjoy this cool light show while you wait.
+      {% else %}
+      Apply status was lost. The service may have restarted.
+      {% endif %}
+    </p>
+    <p class="hint" id="apply-last-update">
+      {% if latest_entry %}
+      Latest: {{ latest_entry.command }} - {{ latest_entry.summary }}
+      {% else %}
+      Waiting for the first Apply command to start.
+      {% endif %}
+    </p>
+  </div>
+</section>
+
+<div class="indeterminate-progress" aria-hidden="true">
+  <span></span>
+</div>
+
+<div class="actions split">
+  <a href="/logs" class="secondary" target="_blank" rel="noopener">Open full log</a>
+</div>
+
+<script>
+  const message = document.getElementById("apply-status-message");
+  const lastUpdate = document.getElementById("apply-last-update");
+  let lastChange = Date.now();
+  let lastCommand = "";
+
+  function describe(entry) {
+    if (!entry) {
+      return "Waiting for the first Apply command to start.";
+    }
+    const command = entry.command || "Apply command";
+    const summary = entry.summary || "Working.";
+    return `Latest: ${command} - ${summary}`;
+  }
+
+  async function refreshApplyStatus() {
+    try {
+      const response = await fetch("/apply/status", { cache: "no-store" });
+      if (!response.ok) {
+        message.textContent = "Apply status could not be refreshed. Check the full log.";
+        return;
+      }
+      const data = await response.json();
+      const entry = data.latest_entry;
+      const command = entry && entry.command ? `${entry.command}:${entry.summary || ""}` : "";
+      if (command && command !== lastCommand) {
+        lastCommand = command;
+        lastChange = Date.now();
+      }
+
+      if (data.status === "succeeded" && data.redirect) {
+        window.location.href = data.redirect;
+        return;
+      }
+      if (data.status === "failed" && data.failure_url) {
+        window.location.href = data.failure_url;
+        return;
+      }
+      if (data.status === "lost") {
+        message.textContent = data.message || "Apply status was lost. The service may have restarted.";
+      } else if (Date.now() - lastChange > 30000) {
+        message.textContent = "Still waiting on the current command.";
+      } else {
+        message.textContent = "Apply is running.";
+      }
+      lastUpdate.textContent = describe(entry);
+    } catch (error) {
+      message.textContent = "Apply status could not be refreshed. Check the full log.";
+    }
+  }
+
+  setInterval(refreshApplyStatus, 1500);
+  refreshApplyStatus();
+</script>
+{% endblock %}

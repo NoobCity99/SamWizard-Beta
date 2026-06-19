@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Beta recovery notes - SamWizard</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+
+<body>
+  {% include "_beta_chrome.html" %}
+  <main class="shell log-shell">
+    <section class="wizard log-page">
+      <header class="wizard-header log-page-header">
+        <p class="eyebrow">SamWizard</p>
+        <p class="beta-build-pill">{{ beta_build_label }}</p>
+        <h1>Beta recovery notes</h1>
+        <p class="lead">
+          This page is read-only. It explains where SamWizard writes managed settings and where backups may exist.
+        </p>
+      </header>
+
+      <div class="content">
+        <div class="notice warning-panel">
+          Use these notes only if beta setup fails or you need to inspect what changed. SamWizard does not run rollback
+          commands from this page.
+        </div>
+
+        <section class="recovery-grid" aria-label="Recovery reference">
+          <article class="recovery-card">
+            <h2>Persistent drive mounts</h2>
+            <p>SamWizard-managed mount blocks live in <code>/etc/fstab</code>.</p>
+            <pre>sudo cp /etc/fstab.samba-wizard.YYYYMMDDHHMMSS.bak /etc/fstab
+sudo systemctl daemon-reload</pre>
+          </article>
+
+          <article class="recovery-card">
+            <h2>Samba shares</h2>
+            <p>SamWizard-managed share blocks live in <code>/etc/samba/smb.conf</code>.</p>
+            <pre>sudo cp /etc/samba/smb.conf.samba-wizard.YYYYMMDDHHMMSS.bak /etc/samba/smb.conf
+sudo testparm -s
+sudo systemctl restart smbd</pre>
+          </article>
+
+          <article class="recovery-card">
+            <h2>Wi-Fi Netplan</h2>
+            <p>The beta disables Wi-Fi setup. Older test runs may have used <code>/etc/netplan/99-samba-wizard-wifi.yaml</code>.</p>
+            <pre>sudo ls -l /etc/netplan/99-samba-wizard-wifi.yaml*
+sudo netplan generate
+sudo netplan apply</pre>
+          </article>
+
+          <article class="recovery-card">
+            <h2>Managed block markers</h2>
+            <p>Look for these comments before making manual edits.</p>
+            <pre># BEGIN SAMBA WIZARD MOUNT
+# END SAMBA WIZARD MOUNT
+# BEGIN SAMBA WIZARD SHARE
+# END SAMBA WIZARD SHARE</pre>
+          </article>
+        </section>
+
+        <div class="actions split">
+          <a href="/" class="secondary">Back to SamWizard</a>
+          <a href="/beta/diagnostics" class="beta-action-button">Export diagnostics</a>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+
+</html>

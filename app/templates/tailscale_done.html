@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Your Tailscale Samba address{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Your Samba share is still <strong>{{ share.name }}</strong>. Use the home network address at home and the Tailscale
+  address when your own devices are connected through Tailscale.
+</p>
+
+<div class="address-compare">
+  <div class="connection">
+    <span>Home network address</span>
+    <code>{{ local_path }}</code>
+  </div>
+  <div class="connection">
+    <span>Tailscale address</span>
+    <code>{{ tailscale_path }}</code>
+  </div>
+</div>
+
+<div class="notice">
+  The folder did not move. The share did not change. Only the address changed.
+</div>
+
+<div class="actions split">
+  <a href="/tailscale/firewall" class="secondary">Back to firewall</a>
+  <a href="/tailscale/windows" class="secondary">Set up your Windows PC</a>
+</div>
+{% endblock %}

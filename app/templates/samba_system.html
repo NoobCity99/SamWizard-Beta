@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Your Samba system{% endblock %}
+
+{% block content %}
+  <p class="lead">
+    This page explains the current Samba setup in plain language. It only reads system information.
+  </p>
+
+  <dl class="facts">
+    <div>
+      <dt>Samba</dt>
+      <dd>{{ "Installed" if samba.installed else "Not found" }}</dd>
+    </div>
+    <div>
+      <dt>Version</dt>
+      <dd>{{ samba.version or "Unavailable" }}</dd>
+    </div>
+    <div>
+      <dt>Service</dt>
+      <dd>{{ samba.service_status or "Unknown" }}</dd>
+    </div>
+    <div>
+      <dt>Setup mode</dt>
+      <dd>{{ samba.setup_message or samba.message }}</dd>
+    </div>
+  </dl>
+
+  <section class="summary-panel" aria-labelledby="samba-users-title">
+    <h2 id="samba-users-title">Samba users</h2>
+    {% if samba.users %}
+      <ul class="system-detail-list">
+        {% for user in samba.users %}
+          <li>{{ user.name }}{% if user.display_name %} - {{ user.display_name }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No Samba users were found.</p>
+    {% endif %}
+  </section>
+
+  <section class="summary-panel" aria-labelledby="samba-shares-title">
+    <h2 id="samba-shares-title">Shared folders</h2>
+    {% if samba.shares %}
+      <ul class="system-detail-list">
+        {% for share in samba.shares %}
+          <li>{{ share.name }}{% if share.path %}: {{ share.path }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No configured shared folders were found.</p>
+    {% endif %}
+  </section>
+
+  <section class="summary-panel" aria-labelledby="samba-sessions-title">
+    <h2 id="samba-sessions-title">Active connections</h2>
+    {% if samba.active_sessions %}
+      <ul class="system-detail-list">
+        {% for session in samba.active_sessions %}
+          <li>{{ session.username }} is connected{% if session.pid %} through process {{ session.pid }}{% endif %}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No active Samba connections were found right now.</p>
+    {% endif %}
+  </section>
+
+  <div class="actions split">
+    <a href="/system-check" class="secondary">Back to system check</a>
+  </div>
+{% endblock %}

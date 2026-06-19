@@ -1,0 +1,709 @@
+{
+  "id": "ubuntu_cli_basics",
+  "title": "Ubuntu Server & CLI Basics",
+  "summary": "A beginner-friendly path for understanding your Ubuntu Server, terminal commands, Samba shares, and Tailscale access.",
+  "skills": [
+    {
+      "id": "ubuntu-server",
+      "title": "Ubuntu Server Orientation",
+      "icon": {
+        "type": "builtin",
+        "name": "server"
+      },
+      "summary": "How does a \"server\" work compared to a \"Point & Click\" graphics based computer?",
+      "map": {
+        "row": 0,
+        "col": 0
+      },
+      "layout": {
+        "slot": "top-left",
+        "group": "basics"
+      },
+      "starts_unlocked": true,
+      "unlocks": [
+        "linux-filesystem"
+      ],
+      "lesson": {
+        "intro": [
+          "Your Ubuntu server is now acting like a small appliance in your home.\n\nIt does not need a normal desktop screen like Windows. If you set up your server on a laptop you log-in directly on it, but most of the time, you will control it on your PC through Command Prompt / Powershell Terminal.  Otherwise it's operating \"headless\", executing all the actions & programs you've set up without constant input. The terminal is not “the server.” The terminal is just a text-based control panel.",
+          "You talk to your server using a scripting language callled 'BASH' (Bourne Again SHell). Instead of clicking icons like you do in a graphical interface, you type textual instructions into Bash to navigate files, run applications, and configure system settings. Bash 'prints' results on the screen for you. ",
+          "CORE IDENTITY ELEMENTS: First thing first, lets explore the various identity and location commands. \n\n"
+        ],
+        "commands": [
+          {
+            "command": "hostname",
+            "origin": "\"Host Name\"",
+            "purpose": "Show me this computer’s network name. You set this during Ubuntu install.",
+            "outcome": "Prints server name you designated, This name may sometimes appear in your router, on your network, or in connection instructions."
+          },
+          {
+            "command": "whoami",
+            "origin": "\"Who am i\"",
+            "purpose": "An existential command, \"What is the username I'm logged in as\"?",
+            "outcome": "Example : User1"
+          },
+          {
+            "command": "pwd",
+            "origin": "\"Print Working Directory\"",
+            "purpose": "means: “Show me the folder I am currently standing in\". PRINT in this case means 'print on screen'. ",
+            "outcome": "Prints a file path location:\nexample  '/home/User1'"
+          },
+          {
+            "command": "ls",
+            "origin": "\"List\"",
+            "purpose": "lists the files and folders in your current location. If you are in /home/User1",
+            "outcome": "'ls' shows what is inside:\n/User1\nDocuments\nDownloads\nSamwizard_Data"
+          },
+          {
+            "command": "ip address",
+            "origin": "Internet Protocol Address",
+            "purpose": "“Show me the network addresses assigned to this server.”",
+            "outcome": "Your server may show several network sections. The one you usually care about looks something like:  192.168.1.50"
+          },
+          {
+            "command": "df -h",
+            "origin": "\"Disk Free , Human readable\"",
+            "purpose": "Show me how much disk space is used and free, in a human-readable format.",
+            "outcome": "Ex:\nFilesystem      Size  Used Avail Use% Mounted on\n/dev/sda2       100G   25G   75G  25% /\n/dev/sdb1       2.0T  500G  1.5T  25% /mnt/storage"
+          },
+          {
+            "command": "sudo",
+            "origin": "\"Superuser Do\"",
+            "purpose": "A superuser is an administrator-level account with permission to change important parts of the system. So sudo means: “Run this command with administrator power.”",
+            "outcome": "When you put 'sudo' at the start of a command (ex: sudo apt upgrade) you will be asked for your password to confirm you have the authority to take this action. "
+          }
+        ],
+        "exercise": "Run these commands one by one to reveal your server Identity and Location: \nwhoami\nhostname\nip address\npwd\ndf -h\n\n",
+        "paste_prompt": "Paste your results to keep a snapshot of how it all started right here if you need to come back and reference it. "
+      }
+    },
+    {
+      "id": "terminal-basics",
+      "title": "Remote Control / Terminal Access",
+      "icon": {
+        "type": "builtin",
+        "name": "terminal"
+      },
+      "summary": "Logging Into Your Server from Another Computer: How to open a terminal and safely connect to their Ubuntu server using SSH.",
+      "map": {
+        "row": 0,
+        "col": 2
+      },
+      "layout": {
+        "slot": "top-center",
+        "group": "basics"
+      },
+      "starts_unlocked": true,
+      "unlocks": [
+        "firewall-basics"
+      ],
+      "lesson": {
+        "intro": [
+          "SSH means 'Secure Shell' , Plain-English meaning:\n- SSH lets you control your Ubuntu server from another computer using a secure text connection. If you set up your server on an old laptop, you don't HAVE To do this, but it's very handy to SSH , especially if you're trying something new and need to be able to Copy/Paste commands in. \n",
+          "the user can open:\n\n- Command Prompt\n- PowerShell\n- Windows Terminal\n- macOS Terminal\n- another Linux terminal\n\nThe user needs three things:\n\n- The server’s username\n- server’s IP address\n- server account’s password"
+        ],
+        "commands": [
+          {
+            "command": "SSH Username@ipaddress",
+            "origin": "who's logging into the server",
+            "purpose": "remote login just as if you were working AT your server",
+            "outcome": "The first time the user connects, they may see something like:\n\"Are you sure you want to continue connecting? Y/N\"\n\n- YES means: “I recognize this server and want to save this connection as trusted.”"
+          },
+          {
+            "command": "SSH Username@hostname",
+            "origin": "logging in via server name",
+            "purpose": "easier to remember than the ip address",
+            "outcome": "Most times on your local network (if your router supports local hostnames) you can use the name of your server instead of the ip address.  "
+          }
+        ],
+        "exercise": "if you haven't already,  SSH into your server and use that terminal to continue on with the course. ",
+        "paste_prompt": "Optional: paste the two short outputs here."
+      }
+    },
+    {
+      "id": "server-users",
+      "title": "Users & Permissions",
+      "icon": {
+        "type": "builtin",
+        "name": "identity"
+      },
+      "summary": "Your Ubuntu user name is not just a login. It is the main administrator account for the entire server. In this segment we'll discuss how to create, manage, and remove other users, including the difference between Ubuntu system users and Samba file-sharing users.",
+      "map": {
+        "row": 0,
+        "col": 4
+      },
+      "layout": {
+        "slot": "top-right",
+        "group": "basics"
+      },
+      "starts_unlocked": true,
+      "unlocks": [
+        "samba-basics"
+      ],
+      "lesson": {
+        "intro": [
+          "Right now you should have an SSH connection to your server with your main login, \nThis account can:\n\nInstall software\nChange server settings\nCreate and delete users\nChange passwords\nStart and stop services\nModify shared folders\nChange permissions\nBreak things if used carelessly**\n\nYour admin user is the owner of the server’s steering wheel. This is why Ubuntu often asks for your password before important changes. It is making sure the person making the change is allowed to do it.",
+          "Most beginners may only need one user at first. But later, you might create another Ubuntu user if:\n-Someone else needs access to the server\n-You want a separate non-admin account\n-A service needs its own account\n-You want different people to have different file permissions\n-You want a Samba user for a specific person\n**Beginner rule:**\nDo not give every user admin power. Most users should not be in the sudo group."
+        ],
+        "commands": [
+          {
+            "command": "sudo",
+            "origin": "superuser do",
+            "purpose": "A superuser is an administrator-level user with permission to change important parts of the system.",
+            "outcome": "commands with SUDO in front of it will execute with admin power.  If a particular command NEEDS admin power to execute, and you haven't included SUDO first, it will warn you that action can't not be completed without admin permission. "
+          },
+          {
+            "command": "groups",
+            "origin": "“Show me the permission groups my current user belongs to.”",
+            "purpose": "Making sure all the necessary permissions are assigned to the user",
+            "outcome": "sam adm cdrom sudo dip plugdev\n\nmeans: The user sam belongs to several permission groups, including the sudo group."
+          },
+          {
+            "command": "sudo adduser alex",
+            "origin": "“Using administrator permission, create a new Ubuntu system user named alex.”",
+            "purpose": "Create the user first, then set permissions or assign to groups after. ",
+            "outcome": "user 'alex' would be created and Ubuntu will ask you to set a password after. "
+          },
+          {
+            "command": "sudo usermod -aG sudo alex",
+            "origin": "Give a User Admin Power",
+            "purpose": "“Using administrator permission, modify the user named alex by adding them to the administrator group.”",
+            "outcome": "alex now has A LOT of power, make sure you trust alex. (we don't) "
+          }
+        ],
+        "exercise": "create a new user called 'watchman', don't assign any elevated permissions. just keep it handy in case you want to log in and monitor your system without making any changes. ",
+        "paste_prompt": "Optional: paste the hostname and first IP address here."
+      }
+    },
+    {
+      "id": "linux-filesystem",
+      "title": "Files, Folders, and Paths",
+      "icon": {
+        "type": "builtin",
+        "name": "folder"
+      },
+      "summary": "Linux/Ubuntu organizes files, how to move around safely, and how to understand paths without treating the file system like a mystery maze.",
+      "map": {
+        "row": 1,
+        "col": 1
+      },
+      "layout": {
+        "slot": "upper-left",
+        "group": "basics"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "drives-and-mounts"
+      ],
+      "lesson": {
+        "intro": [
+          "Linux uses one big folder tree that starts at /. Drives, user folders, services, and system files all appear somewhere under that root.\nWindows often feels like this:\nC:\\\nD:\\\nE:\\\nLinux looks like this:\nroot/           (The top of the Ubuntu file system)\n├── home (users folders)\n├── etc     (system & config files)\n├── mnt   (extra drives mounted)\n├── srv      (server shared drives)\n├── var      (System Logs)\n└── usr     (Installed system programs and resources)\n\nExample: /home/samuser  “The terminal is currently standing inside the samuser’s home folder.”",
+          "SamWizard uses folders under /srv because /srv is commonly used for data served to other computers.\nImportant warning:\n\nBeginners should mostly work inside /home, /mnt, or SamWizard-created folders. Avoid editing /etc unless SamWizard or a trusted guide specifically tells you to."
+        ],
+        "commands": [
+          {
+            "command": "ls -la",
+            "origin": "list, long format, all",
+            "purpose": "List everything in this folder, using a long detailed view, including hidden files.",
+            "outcome": "Hidden files in Ubuntu often start with a dot:\n.bashrc\n.profile\n.config"
+          },
+          {
+            "command": "cd",
+            "origin": "change directory",
+            "purpose": "“Move the terminal into another folder.”",
+            "outcome": "'cd /home/user/notes' to do work INSIDE your notes folder \n\n'cd ~'  will take you straight to your home folder (~ = home) "
+          },
+          {
+            "command": "lsblk",
+            "origin": "list block devices",
+            "purpose": "Displays a hierarchical, tree-like overview of all available storage drives and their partitions. It is highly useful for identifying device names (e.g., sda, nvme0n1), understanding disk relationships, and checking where partitions are mounted.  ADD \" -f\" for file system info included. ADD \" -d\" to hide partitions and show just the storage devices. ",
+            "outcome": "NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT\nsda           8:0    0 465.8G  0 disk \n├─sda1        8:1    0   512M  0 part /boot/efi\n├─sda2        8:2    0     4G  0 part [SWAP]\n└─sda3        8:3    0 461.3G  0 part /\nnvme0n1     259:0    0 931.5G  0 disk \n└─nvme0n1p1 259:1    0 931.5G  0 disk /mnt/storage"
+          }
+        ],
+        "exercise": "Run 'lsblk -f' and identify your SAMBA share drive with it's UUID number, copy & paste it below for future reference. ",
+        "paste_prompt": "SAMBA Drive UUID"
+      }
+    },
+    {
+      "id": "firewall-basics",
+      "title": "UFW Firewall Basics",
+      "icon": {
+        "type": "builtin",
+        "name": "lock"
+      },
+      "summary": "The Server’s Front Door: what UFW is, why a firewall matters, and how to safely allow the services they actually need: SSH, Samba, and possibly Tailscale-related access.",
+      "map": {
+        "row": 2,
+        "col": 0
+      },
+      "layout": {
+        "slot": "middle-left",
+        "group": "basics"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "updates-maint",
+        "samba-mounting"
+      ],
+      "lesson": {
+        "intro": [
+          "UFW means: Uncomplicated Firewall\n\nPlain-English meaning: UFW is Ubuntu’s beginner-friendly firewall tool. It controls what network traffic is allowed to reach your server.\n\nA firewall is like a locked front desk for the server.\nIt decides:\n- What is allowed in\n- What is blocked\n- Which services other computers can reach\n\nMain idea:\nYour server should only leave open the doors it actually needs.",
+          "A fresh Ubuntu server may run services like:\n-SSH remote login\n-Samba file sharing\n-Tailscale private networking\n-Web dashboards\n-Future apps like Nextcloud, Cockpit, or Home Assistant\n\nEach service may listen on a port. A port is like a numbered doorway into the server.\n\nService\tCommon Port\t             Meaning\nSSH\t                22\t                     Remote terminal access\nSamba\t       445\t                     Windows file sharing\nHTTP\t        80\t                     Normal web traffic\nHTTPS\t       443                        Secure web traffic\n\nIf the user is connected through SSH, they must allow SSH before turning the firewall on.\nOtherwise, they may lock themselves out of the server.\n\nImportant rule:\nBefore enabling UFW, make sure SSH is allowed.\n\n**All of this is likely moot for you at the moment, if you already installed SAMBA & TAILSCALE, as those install wizards offered to turn on UFW for you during those processes. **"
+        ],
+        "commands": [
+          {
+            "command": "sudo ufw status",
+            "origin": "“Using administrator permission, show me the current firewall status.”",
+            "purpose": "Is your firewall even on? ",
+            "outcome": "Status: inactive (nope, it's not on) "
+          },
+          {
+            "command": "sudo ufw status verbose",
+            "origin": "The detailed version of the previous command",
+            "purpose": "“Using administrator permission, show detailed firewall status and rules.”",
+            "outcome": "Status: active\n\nTo                 Action      From\n--                 ------      ----\nOpenSSH            ALLOW       Anywhere\nSamba              ALLOW       Anywhere"
+          },
+          {
+            "command": "sudo ufw enable",
+            "origin": "Turn that badboy on !",
+            "purpose": "Ubuntu may warn that enabling the firewall could disrupt existing SSH connections. ",
+            "outcome": "Firewall system turned on, now you can add services allowed to access ports. "
+          },
+          {
+            "command": "sudo ufw allow Samba",
+            "origin": "Allow SAMBA access via port 445",
+            "purpose": "This allows other computers on the network to reach the shared folders.",
+            "outcome": "If you couldn't access your SAMBA share, this might have been why. Now you can. "
+          }
+        ],
+        "exercise": "Run the detailed ufw status check, make sure the services you need accessible , are. ",
+        "paste_prompt": "Optional: paste the final ufw status output."
+      }
+    },
+    {
+      "id": "logs-troubleshoot",
+      "title": "Logs & Troubleshooting",
+      "icon": {
+        "type": "builtin",
+        "name": "server"
+      },
+      "summary": "You will learn how to check Ubuntu logs, search through them, and use those clues when Samba, or other services are not behaving correctly.",
+      "map": {
+        "row": 2,
+        "col": 2
+      },
+      "layout": {
+        "slot": "middle-right",
+        "group": "basics"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "script-basics"
+      ],
+      "lesson": {
+        "intro": [
+          "Logs are the server’s notes about what happened.\nThey can help answer questions like:\n\n-Did Samba start correctly?\n-Did someone connect to a share?\n-Did Tailscale lose connection?\n-Did a service crash?\n-Did the server restart?\n-Did Ubuntu block or reject something?\n\nLogs do not fix the problem by themselves. They help you find where the problem started."
+        ],
+        "commands": [
+          {
+            "command": "journalctl",
+            "origin": "System Log Journal, control",
+            "purpose": "Ubuntu uses a logging system called the journal.",
+            "outcome": "Dec 02 13:39:41 systemd[1]: Started session-66.scope\nDec 02 13:40:10 systemd[1]: Starting sysstat-collect.service\nDec 02 13:40:10 systemd[1]: sysstat-collect.service: Deactivated"
+          },
+          {
+            "command": "journalctl -u smbd",
+            "origin": "System Log Journal for unit SAMBA",
+            "purpose": "Check Logs for One Service",
+            "outcome": "Dec 02 21:32:03  starting smbd.service\nDec 04 05:38:29  Stopping smbd.service"
+          },
+          {
+            "command": "journalctl -u smbd --since today",
+            "origin": "Limit logs to recent ",
+            "purpose": "If you've been following along.....use a '--since' modifier to prevent the results from starting the day your server or that service was created. ",
+            "outcome": "OTHERS: \njournalctl --since \"1 hour ago\"\njournalctl --since \"30 minutes ago\"\njournalctl -u ssh --since today\n"
+          }
+        ],
+        "exercise": "Inspect the logs for your last SSH login. ",
+        "paste_prompt": "Optional: paste the error line you saw."
+      }
+    },
+    {
+      "id": "samba-basics",
+      "title": "Manage SAMBA",
+      "icon": {
+        "type": "builtin",
+        "name": "network"
+      },
+      "summary": "Learn how Samba fits into Ubuntu, how Samba users are different from Ubuntu users, how to check whether Samba is running, and what has to happen before a new drive can become a Samba share.",
+      "map": {
+        "row": 1,
+        "col": 5
+      },
+      "layout": {
+        "slot": "upper-right",
+        "group": "networking"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "app-installing-basics"
+      ],
+      "lesson": {
+        "intro": [
+          "Samba is the service that lets your Ubuntu server share folders with Windows, macOS, and Linux computers. Samba does not create magic storage. It shares real folders that already exist on your Ubuntu server.\n\nYour server has Ubuntu system users.\nThese users can log into the server, own files, and run commands. A Samba user usually starts as a real Ubuntu user, but Samba keeps its own separate password.\n\nUbuntu system user--->Logging into the server, owning files, using SSH\nSamba user--->Ubuntu user with access to shared folders from Windows/macOS/Linux\n\n",
+          "Your main actions with SAMBA after install will be ADDING NEW DRIVES or ADDING NEW USERS.   \n-New Drives: Get yourself a powered USB Hub and start racking up the storage if you want, you can set up a ROBOCOPY script on windows to back up your PC periodically. \n-New Users: If you have other folks in your home you trust (we don't) you can give them access to JUST their drive.  WARNING: Add a new user and SamWizard will not be able to help you mount a new drive... SamWizard is for novices & noobs... not skilled Linux Wizards. "
+        ],
+        "commands": [
+          {
+            "command": "systemctl status smbd",
+            "origin": "system control, status , Samba Daemon",
+            "purpose": "“Ask Ubuntu whether the main Samba file-sharing service is running.”",
+            "outcome": "active (running)"
+          },
+          {
+            "command": "sudo systemctl restart smbd",
+            "origin": "superuser do restart samba",
+            "purpose": "After most changes to SAMBA , a restart of that system will be required. ",
+            "outcome": "Samba will restart"
+          },
+          {
+            "command": "testparm -s",
+            "origin": "test parameters -show simple",
+            "purpose": "“Check Samba’s configuration file and show the active Samba settings in a simplified form.”",
+            "outcome": "ex:\n[Backups]\n[Media]\n[Storage]"
+          },
+          {
+            "command": "sudo pdbedit -L",
+            "origin": "password database -List",
+            "purpose": "“Using administrator permission, list the users in Samba’s password database.”",
+            "outcome": "This shows Samba users, not every Ubuntu system user."
+          },
+          {
+            "command": "sudo smbpasswd -a alex",
+            "origin": "sudo samba password -add alex",
+            "purpose": "alex is an existing Ubuntu user.... but now alex is getting a SAMBA password, so he can use SAMBA ",
+            "outcome": "alex is now a SAMBA user "
+          }
+        ],
+        "exercise": "Run hostname -I and compare it with the address SamWizard shows in setup screens.",
+        "paste_prompt": "Optional: paste the first local IP address."
+      }
+    },
+    {
+      "id": "drives-and-mounts",
+      "title": "Drives And Mounts",
+      "icon": {
+        "type": "builtin",
+        "name": "drive"
+      },
+      "summary": "You will learn how Ubuntu sees drives, why Linux “mounts” drives into folders, how to inspect drives safely, and how to mount a drive. ",
+      "map": {
+        "row": 3,
+        "col": 1
+      },
+      "layout": {
+        "slot": "far-left",
+        "group": "storage"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "samba-mounting"
+      ],
+      "lesson": {
+        "intro": [
+          "Ubuntu has one big folder tree that starts at:   /\nThat top folder is called the root of the filesystem.\n\nWhen Ubuntu uses a drive, it attaches that drive to a folder.\nExample:\n/mnt/storage\n\nThat means:  “The drive is available through the folder /mnt/storage.”\n\nMain idea:  In Linux, drives do not become D: or E:. They become folders.",
+          "Important Vocabulary:\n\n- Drive=\tA physical or virtual storage device, like an HDD, SSD, USB drive, or NVMe drive\n- Partition=\tA section of a drive that can hold a filesystem\n- Filesystem=\tThe format used to organize files on a partition, such as ext4, exFAT, or NTFS\n- Mount=   \tAttach a drive or partition to a folder\n- Mount point= \tThe folder where the drive appears\n- UUID=     \tA unique ID for a partition\n- /etc/fstab= \tThe file that tells Ubuntu what drives to mount automatically at startup"
+        ],
+        "commands": [
+          {
+            "command": "lsblk",
+            "origin": "list block devices",
+            "purpose": "Shows disks, partitions, sizes, and mount points.",
+            "outcome": "Prints a tree of storage devices.\n\nuse 'lsblk -f' for File System Data included\nuse 'lsblk -d' to hide partitions and just show full drives"
+          },
+          {
+            "command": "findmnt",
+            "origin": "Find mounted filesystems.",
+            "purpose": "use to show ALL mounted file systems -OR- try a more narrow location like,  'findmnt /mnt/mystuff",
+            "outcome": "Prints target folders and source devices. "
+          },
+          {
+            "command": "sudo mkdir -p /mnt/mystuff",
+            "origin": "Make a Directory inside '/mnt' called 'mystuff'",
+            "purpose": "Using administrator permission, create the folder /mnt/mystuff so a drive can be attached there next.' (Drives get attached to folders) \n-----------------------\n-p = \"Create parent folders if needed and do not complain if the folder already exists\"",
+            "outcome": "It creates a folder you'll 'mount' your drive to. (like assigning a mailbox to someone in an apartment building. \n\nThe next step will be a multi-part process to assign your physical drive to that mounting folder so it shows up there every time you boot up. "
+          },
+          {
+            "command": "sudo nano /etc/fstab",
+            "origin": "File System Table , a text document storing file system configuration details. ",
+            "purpose": "This command opens a text file in your terminal. You will edit this file so your server knows that YOUR STORAGE DEVICE should be mounted to /mnt/mystuff  every time it boots.  BUT FIRST , collect this information: ",
+            "outcome": "Run 'lsblk -f' and look for: \nUUID : a static id number for your drive device\nFSType:  Filesystem format ( ie: NTFS, exfat )\n- - - - - - - - - - - - - - - - - - - - - - - - - - - \nString it all together like this: \n\"UUID=a1b2c3d4-e5f6-7890-abcd-111122223333 /mnt/mystuff ntfs defaults,nofail 0 2\"\n\n- Paste it at the bottom of the /fstab. \n- Press \"CTL+O\"  then ENTER to save\n- Press \"CTL+X\" to exit. \n\nThe file system table (fstab) will now tell your server WHERE to put that specific device every time you boot up. "
+          },
+          {
+            "command": "sudo mount -a",
+            "origin": "Mount All Devices",
+            "purpose": "Now that you've updated the file system table with you mounting instructions, this will test your update by telling ubuntu to mount everything listed in /etc/fstab that is not already mounted. ",
+            "outcome": "NAME                      MAJ:MIN RM   SIZE RO TYPE MOUNTPOINTS\nsda                         8:0    0 476.9G  0 disk\n└─sda1                      8:1    0 476.9G  0 part /mnt/SSK-Portable\nsdb                         8:16   0   4.5T  0 disk\n├─sdb1                      8:17   0    16M  0 part\n└─sdb2                      8:18   0   4.5T  0 part /mnt/mystuff"
+          }
+        ],
+        "exercise": "When you're ready, find a reason to mount a second drive to your server, and give it a whirl. ",
+        "paste_prompt": "Optional: paste one drive line that includes a mount point."
+      }
+    },
+    {
+      "id": "samba-mounting",
+      "title": "Mount New SAMBA Drive",
+      "icon": {
+        "type": "builtin",
+        "name": "network"
+      },
+      "summary": "You will take a mounted drive Ubuntu can already see and turn that drive into a Samba share that other computers can access.",
+      "map": {
+        "row": 3,
+        "col": 3
+      },
+      "layout": {
+        "slot": "lower-left",
+        "group": "basics"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "script-basics"
+      ],
+      "lesson": {
+        "intro": [
+          "A drive must already be mounted before Samba can share it.\nExample mounted drive:\n/mnt/mystuff\n\nHow SAMBA will Share it: \n\\\\100.0.0.0\\mystuff\n\n",
+          "Follow the below steps to add a new drive to your SAMBA Share setup. "
+        ],
+        "commands": [
+          {
+            "command": "df -h",
+            "origin": "Drives and free space -  human readable",
+            "purpose": "Confirm the Drive you're adding is actually mounted. ",
+            "outcome": "Filesystem         Size  Used Avail Use% Mounted on\n/dev/sda1          477G  102G  376G  22% /mnt/myfirstdrive\n/dev/sdb2          4.6T  1.1T  3.5T  24% /mnt/mystuff"
+          },
+          {
+            "command": "sudo chown -R alex:alex /mnt/mystuff",
+            "origin": "Change ownership of everything in the /mnt/mystuff folder ",
+            "purpose": "Give the right user ownership - “Make the Ubuntu user alex the owner of the shared folder and (-R,  everything inside it.)”",
+            "outcome": "Prints uid, gid, and groups."
+          },
+          {
+            "command": "sudo smbpasswd -a alex",
+            "origin": "Make user alex a SAMBA password",
+            "purpose": "Ensure the user for /mnt/mystuff actually is a SAMBA user ",
+            "outcome": "Asked to confirm password or told it already exists. "
+          },
+          {
+            "command": "sudo nano /etc/samba/smb.conf",
+            "origin": "Opens the Samba Configuration Text file",
+            "purpose": "Add your new share drive to the SAMBA CONFIGURATION file. \nPaste the below config info at the bottom of the text file. ",
+            "outcome": "[MyStuff]\n   path = /mnt/mystuff\n   browseable = yes\n   read only = no\n   valid users = alex\n-----------------------\n'CTL + O'  then ENTER to save changes\n'CTL + X'    to exit"
+          }
+        ],
+        "exercise": "Open 'WIN + R' and type in \"   \\\\Servier-ip-address\\MyStuff  \"  |  You should be prompted to enter login/pswd ,  use alex's login.  Then brag about your wizardry in the block below. ",
+        "paste_prompt": "Optional: paste the permission letters from the first column."
+      }
+    },
+    {
+      "id": "updates-maint",
+      "title": "System Updates - Maintenance",
+      "icon": {
+        "type": "builtin",
+        "name": "gear"
+      },
+      "summary": "You will learn how to safely update Ubuntu Server, remove old unused packages, reboot when needed, and confirm that Samba and Tailscale are still working afterward.",
+      "map": {
+        "row": 4,
+        "col": 2
+      },
+      "layout": {
+        "slot": "lower-center",
+        "group": "services"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "script-basics"
+      ],
+      "lesson": {
+        "intro": [
+          "Your Ubuntu server needs regular maintenance.\nUpdates help with:\n-Security fixes\n-Bug fixes\n-Software improvements\n-Samba stability\n-Tailscale reliability\n-General server health\n\nMain idea:\nUpdating your server is normal maintenance, not a special emergency task.\nA good beginner routine is:\n-Update weekly or every couple of weeks.\n-Reboot when Ubuntu says a reboot is needed.\n-Check Samba and Tailscale afterward.",
+          "The best part is you can do this all remotely, via SSH. If all you're using this server for is SAMBA share , this will be generally the ONLY interaction you have with your server regularly. Super Simple. And it's GLOBAL, so if you do have other services installed, it updates everything, not just UBUNTU, but SAMBA , TAILSCALE & anything else you have installed. "
+        ],
+        "commands": [
+          {
+            "command": "sudo apt update",
+            "origin": "Tells Ubuntu Package Manager to look for updates",
+            "purpose": "“Using administrator permission, ask Ubuntu to refresh its list of available software updates.” Not to actually update anything, just verify what is AVAILABLE to update. ",
+            "outcome": "Fetched 442 kB in 1s (295 kB/s)\n1 package can be upgraded. Run 'apt list --upgradable' to see it."
+          },
+          {
+            "command": "sudo apt upgrade",
+            "origin": "Package Manager, upgrade those packages",
+            "purpose": "“Using administrator permission, install the available safe updates for software already installed on this server.”  It may ask you a Y/N confirming you want to actually preform the updates. ",
+            "outcome": "  Upgrading: 1, Installing: 0, Removing: 0, Not Upgrading: 0\n  Download size: 42.7 kB\n  Space needed: 1024 B / 1023 GB available\n-------------\n... or something like that. "
+          },
+          {
+            "command": "sudo apt autoremove",
+            "origin": "remove old packages we don't need anymore. ",
+            "purpose": "“Using administrator permission, remove old software packages that Ubuntu no longer needs.”This often removes old helper packages or old Linux kernel components after updates.\n\nBeginner rule:\n'autoremove' is usually safe, but you should still read the summary before saying yes.",
+            "outcome": "List of available packages to be removed.  Say Y/N "
+          },
+          {
+            "command": "sudo reboot",
+            "origin": "boot... again",
+            "purpose": "Sometimes after an update, you'll need to reboot the whole server. *** System restart required ***\nThis is where you'll feel most like an IT guy.... if you have other users on your network, let them know before you flip the switch, they could loose some data if they're in the middle of a transfer.  ",
+            "outcome": "System restarts. "
+          },
+          {
+            "command": "systemctl",
+            "origin": "system control",
+            "purpose": "It is Ubuntu’s main command for how you check, start, stop, restart, and enable the background services that make your server useful. A service is a background program that runs without you manually opening it, like: -Samba file sharing - OR - SSH remote login. ",
+            "outcome": "COMMAND : systemctl status smbd\n\nMeans:\n“Show me whether the Samba service is running.”"
+          }
+        ],
+        "exercise": "Run the Update / Upgrade & Reboot cycle....  get use to the feel of that much power in your hands. ",
+        "paste_prompt": "Optional: paste the Active line."
+      }
+    },
+    {
+      "id": "script-basics",
+      "title": "FINAL EXAM  Shell Script",
+      "icon": {
+        "type": "builtin",
+        "name": "share"
+      },
+      "summary": "One last task to display your wizardry... we'll write a script to let you call up a Quick Reference Guide YOU made for YOU! ",
+      "map": {
+        "row": 5,
+        "col": 1
+      },
+      "layout": {
+        "slot": "bottom-center",
+        "group": "sharing"
+      },
+      "starts_unlocked": false,
+      "unlocks": [],
+      "lesson": {
+        "intro": [
+          "Congratulations! You've completed the SamWizard Academy Skill Tree, all the tools you'll need to manage your SAMBA share cloud server, AND MORE!!!   \n\nInstead of a diploma.... we're going to write a script... a file that contains a list of commands for Ubuntu to execute at your will, with a single command.... otherwise known in some circles as....\n\nCASTING A SPELL ! ",
+          "Presumably this whole time you've been making use of the NOTE PAD here in the Academy... we'll let's use that to make a little cheat sheet, a list of commands YOU want to be able to recall anytime you log into your server. Or if you think \"cheat sheet' is a bit dodgy... we'll call it a Quick Reference guide.  Either way... get your list in order... and we'll proceed. "
+        ],
+        "commands": [
+          {
+            "command": "mkdir -p ~/sw-notes",
+            "origin": "Make folder in my home directory called \"SW-notes\"",
+            "purpose": "Your notes the spell is going to call have to live somewhere,  this is the folder we'll keep it in. ",
+            "outcome": "RUN: \ncd ~\nls -la\n(Confirm your new notes folder is in your home directory) "
+          },
+          {
+            "command": "nano ~/sw-notes/commands.txt",
+            "origin": "Open new txt file in editor, called \"commands.txt\"",
+            "purpose": "This is the actual file you'll put all your commands and notes you want to recall later. ",
+            "outcome": "Nano text editor will open with a blank page, copy / paste all the notes you want to keep here. \n----------------------\nCTL + O  and ENTER = SAVE\nCTL + X  = Exit"
+          },
+          {
+            "command": "cat ~/sw-notes/commands.txt",
+            "origin": "Show me my txt file on screen",
+            "purpose": "Test your file. This will present the commands.txt file as you wrote it on screen, not just a string of text. The 'print' command would just show a string of text. ",
+            "outcome": "Your Commands.txt doc should appear "
+          },
+          {
+            "command": "mkdir -p ~/.local/bin",
+            "origin": "Make a folder where my personal commands live",
+            "purpose": "There are many commands in linux, but this will be a list of YOUR custom commands. ",
+            "outcome": "Folder Created. "
+          },
+          {
+            "command": "nano ~/.local/bin/samnotes",
+            "origin": "open editor for a new command called samnotes",
+            "purpose": "This is going to open the nano text editor so you can create the config file (The script) that tells Ubuntu what to do when you type the command 'samnotes' into the terminal. (your spell) ",
+            "outcome": "PASTE INTO FILE: \n#!/usr/bin/env bash\ncat \"$HOME/sw-notes/commands.txt\"\n\n-----------------------------\nTRANSLATION: \n\"Use Bash language terminal to run this script\"\n\"Show my commands.txt  in the terminal\"\n---------------------------\nCTL + O  , then ENTER to SAVE\nCTL + X   ,   to exit. "
+          },
+          {
+            "command": "chmod +x ~/.local/bin/samnotes",
+            "origin": "Add executable permission to my script 'samnotes'",
+            "purpose": "Changes the permissions of your script to make it a castable spell when you type 'samnotes' into terminal. ",
+            "outcome": "Tells Ubuntu : \"Allow this script to be run like a command.”"
+          },
+          {
+            "command": "source ~/.profile",
+            "origin": "Reload Users commands/settings for the current terminal",
+            "purpose": "This refreshes the system so it will recognize the new COMMAND phrase you have just programed. ",
+            "outcome": "Nothing, Now you can cast your Spell. "
+          }
+        ],
+        "exercise": "In your terminal....  just type 'samnotes' .........  If your commands.txt appears,  you ARE NOW A SAMWIZARD GRADUATE!!!!! ",
+        "paste_prompt": "Optional: paste the Active line or write 'not installed yet'."
+      }
+    },
+    {
+      "id": "app-installing-basics",
+      "title": "Installing Apps & Managing Services",
+      "icon": {
+        "type": "builtin",
+        "name": "terminal"
+      },
+      "summary": "Learn how Ubuntu installs software, how to search for apps, how to install or remove them, and how to tell the difference between an installed program and a running service.",
+      "map": {
+        "row": 5,
+        "col": 5
+      },
+      "layout": {
+        "slot": "far-right",
+        "group": "networking"
+      },
+      "starts_unlocked": false,
+      "unlocks": [
+        "updates-maint",
+        "logs-troubleshoot"
+      ],
+      "lesson": {
+        "intro": [
+          "Ubuntu Has Software Repositories, it does not usually download apps from random websites. Instead, Ubuntu uses software sources called repositories. A repository is like Ubuntu’s pre-approved app warehouse.\n\nWhen you install something with the command 'apt', Ubuntu checks its trusted software lists, downloads the package, installs it, and tracks it for future updates.\n- Package....\tA bundle of software Ubuntu can install\n- App/program....\tSomething you can run, like btop or nano\n- Service....\tA background program that keeps running, like Samba, SSH, or Tailscale\n- Repository....\tA trusted software source Ubuntu downloads packages from\n\nThere are OTHER ways to install apps, just like you did with SamWizard. ",
+          "Quick Comparison Table:\n\nAPT (apt): Installs native system packages. Updates maintained by the Linux distribution. Usually older, highly stable versions. Full access to your system.\n\nSNAP (snap): Installs sandboxed, self-contained apps. Updates automated by the app developer. Bleeding-edge, latest versions. Isolated in a secure \"sandbox\".\n\nCURL (curl): Downloads a single file or script from a URL. Manual Updates by you. High risk if you pipe an untrusted script to bash."
+        ],
+        "commands": [
+          {
+            "command": "sudo apt install btop",
+            "origin": "Superuser install the package 'btop'",
+            "purpose": "btop is a system monitoring tool, like your 'task manager' in windows, cool app, good to have.  Great practice install, go for it. ",
+            "outcome": "Prints device names, Tailscale IPs, and connection status."
+          },
+          {
+            "command": "btop",
+            "origin": "open btop",
+            "purpose": "Open the app btop that you just installed. ",
+            "outcome": "You'll see. "
+          },
+          {
+            "command": "apt list --installed",
+            "origin": "list all installed apps",
+            "purpose": "This can be a LONG LONG list, try adding a 'grep' search word. 'grep' tells the system to look for specific text in it's search. ",
+            "outcome": "apt list --installed | grep samwizard \n\n"
+          },
+          {
+            "command": "systemctl status smbd",
+            "origin": "System Control, status of samba",
+            "purpose": "A package can be installed but not currently running. Installing software puts it on the server. Starting a service makes it actively run in the background.",
+            "outcome": "Look for:\nactive (running)"
+          },
+          {
+            "command": "systemctl list-units --type=service --state=running",
+            "origin": "List all services currently running",
+            "purpose": "Make sure the services you want to be running, is. ",
+            "outcome": "List of active services. \nTRY: \nsystemctl list-units --type=service\n\n...for services , running or not. "
+          },
+          {
+            "command": "sudo systemctl enable smbd",
+            "origin": "enable samba when boot up",
+            "purpose": "Tells Ubuntu to start SAMBA every time the system boots or reboot.",
+            "outcome": "-sudo systemctl start smbd  - \"Start Samba Now\"\n-sudo systemctl stop smbd - \"Stop Samba Now\"\n-sudo systemctl restart smbd - \"Restart Samba now\" \n\n\n"
+          }
+        ],
+        "exercise": "install 'btop' and take it for a spin",
+        "paste_prompt": "..."
+      }
+    }
+  ]
+}

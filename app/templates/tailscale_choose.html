@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Choose the Samba share{% endblock %}
+
+{% block content %}
+{% if no_share %}
+<p class="lead">
+  SamWizard needs a Samba share first so it can show you what address to use after Tailscale is connected.
+</p>
+<div class="notice">
+  Set up Samba first, then come back here to add private remote access to the same share.
+</div>
+<div class="actions split">
+  <a href="/" class="secondary">Back to home</a>
+  <a href="/samba" class="secondary">Set up Samba</a>
+</div>
+{% else %}
+<p class="lead">
+  Choose which existing Samba share you want to reach through Tailscale.
+</p>
+<form method="post" action="/tailscale">
+  <fieldset class="choices">
+    {% for option in share_options %}
+    <label class="choice">
+      <input type="radio" name="share_id" value="{{ option.id }}" required>
+      <span>
+        <strong>{{ option.name }}</strong>
+        <small>{{ option.local_path }}</small>
+        {% if option.path %}
+        <small>Folder on server: {{ option.path }}</small>
+        {% endif %}
+      </span>
+    </label>
+    {% endfor %}
+  </fieldset>
+  <div class="actions split">
+    <a href="/" class="secondary">Back</a>
+    <button type="submit">Use this share</button>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

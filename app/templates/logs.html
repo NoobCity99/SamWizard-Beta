@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Behind the scenes log - SamWizard</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+  </head>
+  <body>
+    {% include "_beta_chrome.html" %}
+    <main class="shell log-shell">
+      <section class="wizard log-page">
+        <header class="wizard-header log-page-header">
+          <p class="eyebrow">SamWizard</p>
+          {% if beta_enabled %}
+          <p class="beta-build-pill">{{ beta_build_label }}</p>
+          {% endif %}
+          <h1>Behind the scenes log</h1>
+          <p class="lead">
+            This page shows commands and responses from this browser session. Passwords and hidden input appear as ********.
+          </p>
+          <form method="post" action="/command-log/clear" class="log-clear-form">
+            <button type="submit" class="secondary-button">Clear log</button>
+          </form>
+          {% if beta_enabled %}
+          <div class="actions inline-actions beta-log-actions">
+            <a href="/beta/diagnostics" class="beta-action-button">Export diagnostics</a>
+            <a href="/beta/recovery" class="secondary">Recovery notes</a>
+          </div>
+          {% endif %}
+        </header>
+
+        <div class="content">
+          <ol class="command-log-list live-command-log" id="command-log-list">
+            {% for entry in command_log %}
+              <li>
+                <strong>{{ entry.phase }}</strong>
+                <code>{{ entry.command }}</code>
+                <span>{{ entry.summary }}{% if entry.exit_code is not none %} Exit code: {{ entry.exit_code }}.{% endif %}</span>
+                {% if entry.stdin_hidden %}
+                  <small>Input hidden: {{ entry.stdin }}</small>
+                {% endif %}
+                {% if entry.stdout %}
+                  <pre>stdout:
+{{ entry.stdout }}</pre>
+                {% endif %}
+                {% if entry.stderr %}
+                  <pre>stderr:
+{{ entry.stderr }}</pre>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+          <p class="empty-log" id="empty-log" {% if command_log %}hidden{% endif %}>No commands have been logged yet.</p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const list = document.getElementById("command-log-list");
+      const empty = document.getElementById("empty-log");
+
+      function appendText(parent, tag, text, className) {
+        if (!text) {
+          return;
+        }
+        const element = document.createElement(tag);
+        if (className) {
+          element.className = className;
+        }
+        element.textContent = text;
+        parent.appendChild(element);
+      }
+
+      function render(entries) {
+        list.replaceChildren();
+        empty.hidden = entries.length > 0;
+        for (const entry of entries) {
+          const item = document.createElement("li");
+          appendText(item, "strong", entry.phase || "Log entry");
+          appendText(item, "code", entry.command || "");
+          const exit = entry.exit_code === null || entry.exit_code === undefined ? "" : ` Exit code: ${entry.exit_code}.`;
+          appendText(item, "span", `${entry.summary || "Recorded note."}${exit}`);
+          if (entry.stdin_hidden) {
+            appendText(item, "small", `Input hidden: ${entry.stdin || "********"}`);
+          }
+          if (entry.stdout) {
+            appendText(item, "pre", `stdout:\n${entry.stdout}`);
+          }
+          if (entry.stderr) {
+            appendText(item, "pre", `stderr:\n${entry.stderr}`);
+          }
+          list.appendChild(item);
+        }
+      }
+
+      async function refreshLog() {
+        try {
+          const response = await fetch("/logs/data", { cache: "no-store" });
+          if (!response.ok) {
+            return;
+          }
+          const data = await response.json();
+          render(data.entries || []);
+        } catch (error) {
+          return;
+        }
+      }
+
+      setInterval(refreshLog, 2000);
+      refreshLog();
+    </script>
+  </body>
+</html>

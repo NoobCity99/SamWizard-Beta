@@ -1,0 +1,92 @@
+{
+  "applied": false,
+  "apply_results": [],
+  "apply_status": "running",
+  "mount_access": "read_write",
+  "reviewed": true,
+  "samba_setup_message": "Samba was not found. Nothing was installed or changed.",
+  "samba_setup_mode": "initial_setup",
+  "selected_location": {
+    "filesystem": "ntfs",
+    "mount_access": "read_write",
+    "mount_path": "/srv/samba/drives/Backup",
+    "name": "Backup drive",
+    "path": "/dev/sda1",
+    "type": "drive",
+    "uuid": "608F594334CE8B8E"
+  },
+  "share_name": "BLUE",
+  "system_summary": {
+    "hostname": "table2",
+    "ip_address": "10.0.0.179",
+    "ubuntu_version": "Ubuntu 26.04 LTS"
+  },
+  "tailscale": {
+    "install_results": [
+      {
+        "details": [
+          "Prepare package key folder: `mkdir -p --mode=0755 /usr/share/keyrings` exited 0."
+        ],
+        "id": "tailscale_keyring_dir",
+        "status": "passed",
+        "summary": "Package key folder is ready.",
+        "title": "Prepare package key folder"
+      },
+      {
+        "details": [
+          "Download Tailscale package key: `curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/resolute.noarmor.gpg -o /usr/share/keyrings/tailscale-archive-keyring.gpg` exited 0."
+        ],
+        "id": "tailscale_keyring",
+        "status": "passed",
+        "summary": "Tailscale package key is ready.",
+        "title": "Download Tailscale package key"
+      },
+      {
+        "details": [
+          "Add Tailscale package source: `curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/resolute.tailscale-keyring.list -o /etc/apt/sources.list.d/tailscale.list` exited 0."
+        ],
+        "id": "tailscale_package_list",
+        "status": "passed",
+        "summary": "Tailscale package source is ready.",
+        "title": "Add Tailscale package source"
+      },
+      {
+        "details": [
+          "Refresh package list: `apt-get update` exited 0. Get:1 https://pkgs.tailscale.com/stable/ubuntu resolute InRelease"
+        ],
+        "id": "tailscale_apt_update",
+        "status": "passed",
+        "summary": "Package list refreshed.",
+        "title": "Refresh package list"
+      },
+      {
+        "details": [
+          "Install private remote access support: `apt-get install -y tailscale` exited 0. Reading package lists..."
+        ],
+        "id": "tailscale_install",
+        "status": "passed",
+        "summary": "Private remote access support is installed.",
+        "title": "Install private remote access support"
+      },
+      {
+        "details": [
+          "Start private remote access service: `systemctl enable --now tailscaled` exited 0."
+        ],
+        "id": "tailscale_service",
+        "status": "passed",
+        "summary": "Private remote access service is running.",
+        "title": "Start private remote access service"
+      }
+    ],
+    "share": {
+      "id": "detected-0",
+      "local_ip": "10.0.0.179",
+      "local_path": "\\\\10.0.0.179\\BLUE",
+      "name": "BLUE",
+      "path": "/srv/samba/drives/Backup",
+      "source": "Detected Samba configuration"
+    },
+    "tailscale_ip": "100.80.20.89"
+  },
+  "username": "Metro"
+}

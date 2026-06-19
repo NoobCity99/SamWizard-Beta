@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Check Tailscale readiness{% endblock %}
+
+{% block content %}
+<p class="lead">
+  SamWizard is checking the existing Samba share and whether this server is already connected to Tailscale.
+</p>
+
+<dl class="facts">
+  <div>
+    <dt>Samba share</dt>
+    <dd>{{ share.name }}</dd>
+  </div>
+  <div>
+    <dt>Home network address</dt>
+    <dd>{{ share.local_path }}</dd>
+  </div>
+  <div>
+    <dt>Tailscale</dt>
+    <dd>{{ tailscale.message }}</dd>
+  </div>
+  <div>
+    <dt>Tailscale address</dt>
+    <dd>{{ tailscale.ipv4 or "Not ready yet" }}</dd>
+  </div>
+  <div>
+    <dt>Internet</dt>
+    <dd>{{ internet.message }}</dd>
+  </div>
+</dl>
+
+<form method="post" action="/tailscale/check" class="actions split">
+  <a href="/tailscale/what-changes" class="secondary">Back</a>
+  <button type="submit">Continue</button>
+</form>
+{% endblock %}

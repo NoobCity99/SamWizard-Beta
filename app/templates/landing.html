@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SamWizard</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+
+<body>
+  {% include "_beta_chrome.html" %}
+  {#
+  Landing page assets live in app/static/assets/landing/.
+  Use landing_banner.png for the wide banner, landing_samba_intro.png and
+  landing_server_intro.png for the 16:9 image slots. Sizing and spacing are
+  controlled by the .landing-* rules in app/static/styles.css.
+  #}
+  {% macro asset_slot(asset, class_name) -%}
+  {% if asset.exists %}
+  <img class="{{ class_name }}" src="{{ url_for('static', path=asset.src) }}" alt="">
+  {% else %}
+  <div class="{{ class_name }} landing-asset-placeholder" role="img"
+    aria-label="Missing image asset {{ asset.filename }}">
+    <span>{{ asset.ratio }} image</span>
+    <strong>{{ asset.filename }}</strong>
+  </div>
+  {% endif %}
+  {%- endmacro %}
+
+  <main class="shell landing-shell">
+    <section class="wizard landing-panel" aria-labelledby="landing-title">
+      <header class="landing-header">
+        <img class="app-logo landing-logo" src="{{ url_for('static', path='/assets/samwizard_logo.png') }}" width="100"
+          height="100" alt="" aria-hidden="true">
+        <b class="eyebrow">SamWizard</b>
+        {% if beta_enabled %}
+        <p class="beta-build-pill">{{ beta_build_label }}</p>
+        {% endif %}
+        <h1 id="landing-title">Build your beginner-friendly Ubuntu server</h1>
+        <p class="leadx landing-lead">
+          <strong style="color: darkorange;"> CONGRATS!! You just set up a Linux Server on your
+            own! It can do a lot of powerful things, like run this Application as a website that you're accessing from
+            another computer!</strong><br>
+          - <u>NEXT</u>, we're going to set up a Share Drive on your new
+          server for you to be able access remotely from a
+          Windows PC. <br>
+          - <u>IDEALLY</u> you have an external hard drive or SSD you've connected to your server via USB, this can be a
+          new one or one you've used for a while and don't want to have to carry around anymore.
+        </p>
+      </header>
+
+      <div class="landing-content">
+        {% if beta_enabled %}
+        <section class="beta-notice-panel" aria-labelledby="landing-beta-notice-title">
+          <div>
+            <p class="check-label">Beta notice</p>
+            <h2 id="landing-beta-notice-title">Help improve SamWizard</h2>
+            <p>
+              If you agree, export a beta diagnostic bundle before or after testing so issues include useful system
+              context and redacted command logs.
+            </p>
+          </div>
+          <div class="actions inline-actions">
+            <a href="/beta/diagnostics" class="beta-action-button">Export diagnostics</a>
+            <a href="/beta/recovery" class="secondary">Recovery notes</a>
+          </div>
+        </section>
+        {% endif %}
+
+        {{ asset_slot(assets.banner, "landing-banner") }}
+
+        <section class="landing-section" aria-labelledby="about-samwizard">
+          <h2 id="about-samwizard">What does SamWizard do?</h2>
+          <div class="landing-feature-grid">
+            {{ asset_slot(assets.samba_intro, "landing-feature-media") }}
+            <div class="landing-copy-panel">
+              <strong>It will Setup Your SAMBA Share Drive</strong>
+              <p>
+                - SAMBA is a free, open-source software suite that builds a bridge for Windows & Mac machines to
+                easily
+                access directories hosted on a Linux server (often used for Network Attached Storage, or NAS).<br>
+
+                - For first-time Linux users this process can be confusing & intimidating. You just want cloud storage
+                at
+                home dagnabbit! Why all this typing and code, no icons to click on?!<br>
+
+                - SamWizard is here to build that bridge with you, guiding you with a familiar interface.
+
+              </p>
+            </div>
+            <div class="landing-copy-panel">
+              <strong>Setting up TailScale access</strong>
+              <p>
+                - Normally, SAMBA only works if your devices are plugged into the exact same home or office router.<br>
+                - Without Tailscale, accessing a SAMBA server from outside your house is incredibly dangerous. It
+                requires opening holes in your home router (port forwarding), which invites hackers to attack your
+                server.<br>
+                - Tailscale creates a secure, private network (your 'Tailnet') allowing only devices YOU designate
+                to access your server from anywhere.
+              </p>
+            </div>
+            {{ asset_slot(assets.server_intro, "landing-feature-media") }}
+          </div>
+        </section>
+
+        <section class="landing-section" aria-labelledby="choose-path">
+          <h2 id="choose-path">Your Path to Wizardry</h2>
+          <div class="landing-paths">
+            <article class="landing-path-card">
+              <a class="landing-path-button" href="/samba">STEP 1: Install SAMBA</a>
+              <p>
+                Plug the drive you want to access remotely into your server and let's begin.
+              </p>
+            </article>
+            <article class="landing-path-card">
+              <a class="landing-path-button" href="/tailscale">STEP 2: Install TAILSCALE</a>
+              <p>
+                Now, lets make it so you can securely access your drive from anywhere, your own cloud storage.
+              </p>
+            </article>
+            <article class="landing-path-card">
+              <a class="landing-path-button" href="/academy">Attend SamWizard Academy</a>
+              <p>
+                Learn beginner-friendly Ubuntu Server and command-line basics through a guided skill tree.
+              </p>
+            </article>
+          </div>
+        </section>
+        <section class="landing-section" aria-labelledby="more-samwizard-info">
+          <h2 id="more-samwizard-info">What is SamWizard Academy?</h2>
+          <div class="landing-feature-grid">
+            {{ asset_slot(assets.wiz_academy_1, "landing-feature-media") }}
+            <div class="landing-copy-panel">
+              <strong>SamWizard is meant to move on</strong>
+              <p>
+                The goal of this app is to get you set up with a useful & secure share drive without having to master or
+                even understand how it was done.<br>
+                BUT, we thought you <i>should</i> know a little something about how your new server works. It
+                <u>will</u>
+                require a little maintenance over time, and who knows, maybe you decide you want to add other programs
+                and really flex what your Ubuntu server can do! AFTERWARDS, you shouldn't need SamWizard anymore...
+                you'll cast your own spells!
+              </p>
+            </div>
+            <div class="landing-copy-panel">
+              <strong>Basic orintation & skills</strong>
+              <p>
+                - The SamWizard Academy will give you a basic understanding of how your server operates and how to do
+                basic commands, maintenance & a few tricks. <br>
+                - The more you learn about how it works and what it can do, the more useful you'll find it to be.
+              </p>
+            </div>
+            {{ asset_slot(assets.wiz_academy_2, "landing-feature-media") }}
+          </div>
+        </section>
+      </div>
+    </section>
+    {% include "_public_footer.html" %}
+  </main>
+</body>
+
+</html>

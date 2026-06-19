@@ -1,0 +1,345 @@
+{
+  "lan_cidrs": [
+    "10.0.0.0/24",
+    "10.0.0.1/32"
+  ],
+  "preview": {
+    "can_apply": true,
+    "message": "These rules keep Samba available on your home network and through Tailscale.",
+    "rules": [
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.0/24",
+          "to",
+          "any",
+          "port",
+          "22"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.0/24 to any port 22",
+        "id": "ufw_lan_ssh_10_0_0_0_24",
+        "summary": "SSH stays reachable from your home network range 10.0.0.0/24.",
+        "title": "Keep SSH available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.0/24",
+          "to",
+          "any",
+          "port",
+          "8080"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.0/24 to any port 8080",
+        "id": "ufw_lan_web_10_0_0_0_24",
+        "summary": "SamWizard stays reachable from your home network range 10.0.0.0/24.",
+        "title": "Keep SamWizard available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.0/24",
+          "to",
+          "any",
+          "port",
+          "445"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.0/24 to any port 445",
+        "id": "ufw_lan_samba_445_tcp_10_0_0_0_24",
+        "summary": "Windows file sharing over TCP stays reachable from your home network range 10.0.0.0/24.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.0/24",
+          "to",
+          "any",
+          "port",
+          "139"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.0/24 to any port 139",
+        "id": "ufw_lan_samba_139_tcp_10_0_0_0_24",
+        "summary": "Older Windows file sharing over TCP stays reachable from your home network range 10.0.0.0/24.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "udp",
+          "from",
+          "10.0.0.0/24",
+          "to",
+          "any",
+          "port",
+          "137"
+        ],
+        "command": "ufw allow proto udp from 10.0.0.0/24 to any port 137",
+        "id": "ufw_lan_samba_137_udp_10_0_0_0_24",
+        "summary": "Windows name service stays reachable from your home network range 10.0.0.0/24.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "udp",
+          "from",
+          "10.0.0.0/24",
+          "to",
+          "any",
+          "port",
+          "138"
+        ],
+        "command": "ufw allow proto udp from 10.0.0.0/24 to any port 138",
+        "id": "ufw_lan_samba_138_udp_10_0_0_0_24",
+        "summary": "Windows browser service stays reachable from your home network range 10.0.0.0/24.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.1/32",
+          "to",
+          "any",
+          "port",
+          "22"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.1/32 to any port 22",
+        "id": "ufw_lan_ssh_10_0_0_1_32",
+        "summary": "SSH stays reachable from your home network range 10.0.0.1/32.",
+        "title": "Keep SSH available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.1/32",
+          "to",
+          "any",
+          "port",
+          "8080"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.1/32 to any port 8080",
+        "id": "ufw_lan_web_10_0_0_1_32",
+        "summary": "SamWizard stays reachable from your home network range 10.0.0.1/32.",
+        "title": "Keep SamWizard available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.1/32",
+          "to",
+          "any",
+          "port",
+          "445"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.1/32 to any port 445",
+        "id": "ufw_lan_samba_445_tcp_10_0_0_1_32",
+        "summary": "Windows file sharing over TCP stays reachable from your home network range 10.0.0.1/32.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "tcp",
+          "from",
+          "10.0.0.1/32",
+          "to",
+          "any",
+          "port",
+          "139"
+        ],
+        "command": "ufw allow proto tcp from 10.0.0.1/32 to any port 139",
+        "id": "ufw_lan_samba_139_tcp_10_0_0_1_32",
+        "summary": "Older Windows file sharing over TCP stays reachable from your home network range 10.0.0.1/32.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "udp",
+          "from",
+          "10.0.0.1/32",
+          "to",
+          "any",
+          "port",
+          "137"
+        ],
+        "command": "ufw allow proto udp from 10.0.0.1/32 to any port 137",
+        "id": "ufw_lan_samba_137_udp_10_0_0_1_32",
+        "summary": "Windows name service stays reachable from your home network range 10.0.0.1/32.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "proto",
+          "udp",
+          "from",
+          "10.0.0.1/32",
+          "to",
+          "any",
+          "port",
+          "138"
+        ],
+        "command": "ufw allow proto udp from 10.0.0.1/32 to any port 138",
+        "id": "ufw_lan_samba_138_udp_10_0_0_1_32",
+        "summary": "Windows browser service stays reachable from your home network range 10.0.0.1/32.",
+        "title": "Keep Samba available at home"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "in",
+          "on",
+          "tailscale0",
+          "to",
+          "any",
+          "port",
+          "22",
+          "proto",
+          "tcp"
+        ],
+        "command": "ufw allow in on tailscale0 to any port 22 proto tcp",
+        "id": "ufw_tailscale_ssh",
+        "summary": "SSH stays reachable through your private Tailscale network.",
+        "title": "Keep SSH available through Tailscale"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "in",
+          "on",
+          "tailscale0",
+          "to",
+          "any",
+          "port",
+          "8080",
+          "proto",
+          "tcp"
+        ],
+        "command": "ufw allow in on tailscale0 to any port 8080 proto tcp",
+        "id": "ufw_tailscale_web",
+        "summary": "SamWizard stays reachable through your private Tailscale network.",
+        "title": "Keep SamWizard available through Tailscale"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "in",
+          "on",
+          "tailscale0",
+          "to",
+          "any",
+          "port",
+          "445",
+          "proto",
+          "tcp"
+        ],
+        "command": "ufw allow in on tailscale0 to any port 445 proto tcp",
+        "id": "ufw_tailscale_samba_445_tcp",
+        "summary": "Windows file sharing over TCP stays reachable through your private Tailscale network.",
+        "title": "Keep Samba available through Tailscale"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "in",
+          "on",
+          "tailscale0",
+          "to",
+          "any",
+          "port",
+          "139",
+          "proto",
+          "tcp"
+        ],
+        "command": "ufw allow in on tailscale0 to any port 139 proto tcp",
+        "id": "ufw_tailscale_samba_139_tcp",
+        "summary": "Older Windows file sharing over TCP stays reachable through your private Tailscale network.",
+        "title": "Keep Samba available through Tailscale"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "in",
+          "on",
+          "tailscale0",
+          "to",
+          "any",
+          "port",
+          "137",
+          "proto",
+          "udp"
+        ],
+        "command": "ufw allow in on tailscale0 to any port 137 proto udp",
+        "id": "ufw_tailscale_samba_137_udp",
+        "summary": "Windows name service stays reachable through your private Tailscale network.",
+        "title": "Keep Samba available through Tailscale"
+      },
+      {
+        "args": [
+          "ufw",
+          "allow",
+          "in",
+          "on",
+          "tailscale0",
+          "to",
+          "any",
+          "port",
+          "138",
+          "proto",
+          "udp"
+        ],
+        "command": "ufw allow in on tailscale0 to any port 138 proto udp",
+        "id": "ufw_tailscale_samba_138_udp",
+        "summary": "Windows browser service stays reachable through your private Tailscale network.",
+        "title": "Keep Samba available through Tailscale"
+      }
+    ]
+  },
+  "samba_app_available": false,
+  "ufw_active": true,
+  "ufw_status": "active"
+}

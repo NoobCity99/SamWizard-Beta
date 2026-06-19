@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Apply setup{% endblock %}
+
+{% block content %}
+<p class="lead">
+  {% if add_drive_mode %}
+  Add this drive to the existing Samba setup for {{ state.username }}.
+  {% else %}
+  Enter your Windows share password, then apply your SAMBA setup to the server.
+  {% endif %}
+</p>
+
+<form method="post" action="/apply">
+  {% if add_drive_mode %}
+  <p class="hint">No password is needed here. SamWizard will reuse the existing Samba user and leave that password
+    unchanged.</p>
+  {% else %}
+  <label class="field">
+    <span>Windows share password</span>
+    <input type="password" name="samba_password" autocomplete="new-password" required>
+  </label>
+  <label class="field">
+    <span>Confirm password</span>
+    <input type="password" name="confirm_samba_password" autocomplete="new-password" required>
+  </label>
+  <p class="hint">This password is sent directly to Samba during Apply. It is not stored in the session.</p>
+  {% endif %}
+  {% if beta_enabled %}
+  <div class="notice warning-panel beta-apply-confirmation">
+    <strong>Beta safety confirmation</strong>
+    <p>
+      This can change system files and services on the server, including Samba configuration, persistent drive mounts,
+      package installation, and service restarts.
+    </p>
+    <label class="checkbox-field">
+      <input type="checkbox" name="beta_confirm_system_changes" value="yes" required>
+      <span>I am testing on a test machine or with a backed-up drive, and I understand SamWizard may change system
+        files and services.</span>
+    </label>
+  </div>
+  {% endif %}
+  <div class="actions split">
+    <a href="/review" class="secondary">Back</a>
+    <button type="submit">{{ "Add this drive" if add_drive_mode else "Apply setup" }}</button>
+  </div>
+</form>
+
+{% if results %}
+<ul class="status-list apply-results" aria-label="Setup results">
+  {% for result in results %}
+  <li class="result-{{ result.status }}">
+    <span class="check">{{ "OK" if result.status == "passed" else "Stop" }}</span>
+    <span>
+      <strong>{{ result.title }}</strong>
+      <small>{{ result.summary }}</small>
+      {% if result.details %}
+      <span class="result-details">
+        {% for detail in result.details %}
+        <code>{{ detail }}</code>
+        {% endfor %}
+      </span>
+      {% endif %}
+    </span>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

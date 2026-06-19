@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Approve this server{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Tailscale needs you to approve this Ubuntu server in your Tailscale account.
+</p>
+
+{% if login_url %}
+<div class="connection tailscale-auth-panel">
+  <span>Tailscale approval link</span>
+  <div class="copy-row">
+    <code id="tailscale-auth-url">{{ login_url }}</code>
+    <button type="button" class="copy-button" data-copy-target="tailscale-auth-url" aria-label="Copy Tailscale approval link"
+      title="Copy Tailscale approval link">
+      <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+        <rect x="9" y="9" width="10" height="10" rx="2"></rect>
+        <path d="M5 15V7a2 2 0 0 1 2-2h8"></path>
+      </svg>
+    </button>
+  </div>
+  <small class="copy-feedback" id="tailscale-copy-feedback" aria-live="polite"></small>
+  <a class="tailscale-auth-link" href="{{ login_url }}" target="_blank" rel="noopener">Open Tailscale approval page</a>
+</div>
+<p class="hint" id="tailscale-auth-status" aria-live="polite">
+  Waiting for Tailscale login. Open that link, sign in, and approve this server.
+</p>
+{% else %}
+<div class="notice">
+  Start the approval process to get a Tailscale sign-in link for this server.
+</div>
+{% endif %}
+
+{% if result %}
+<ul class="status-list apply-results" aria-label="Tailscale authorization result">
+  <li class="result-{{ result.status }}">
+    <span class="check">{{ "OK" if result.status == "passed" else "Stop" }}</span>
+    <span>
+      <strong>{{ result.title }}</strong>
+      <small>{{ result.summary }}</small>
+    </span>
+  </li>
+</ul>
+{% endif %}
+
+<div class="actions split">
+  <a href="/tailscale/install" class="secondary">Back</a>
+  <form method="post" action="/tailscale/authorize/start">
+    <button type="submit">Start approval</button>
+  </form>
+  <form method="post" action="/tailscale/authorize/check">
+    <button type="submit" class="secondary-button">I approved the server. Check again.</button>
+  </form>
+</div>
+
+{% if login_url %}
+<script>
+  const tailscaleAuthStatus = document.getElementById("tailscale-auth-status");
+  const tailscaleCopyButton = document.querySelector("[data-copy-target='tailscale-auth-url']");
+  const tailscaleCopyFeedback = document.getElementById("tailscale-copy-feedback");
+  let tailscaleAuthPolling = true;
+
+  async function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const input = document.createElement("textarea");
+    input.value = text;
+    input.setAttribute("readonly", "");
+    input.style.position = "fixed";
+    input.style.opacity = "0";
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    input.remove();
+  }
+
+  async function refreshTailscaleAuthorization() {
+    if (!tailscaleAuthPolling) {
+      return;
+    }
+    try {
+      const response = await fetch("/tailscale/authorize/status", { cache: "no-store" });
+      const data = await response.json();
+      if (data.redirect) {
+        tailscaleAuthStatus.textContent = data.message || "Tailscale is connected.";
+        window.location.href = data.redirect;
+        return;
+      }
+      tailscaleAuthStatus.textContent = data.message || "Waiting for Tailscale login.";
+    } catch (error) {
+      tailscaleAuthStatus.textContent = "Still waiting. Use the manual check button if this does not update.";
+    }
+  }
+
+  window.addEventListener("pagehide", () => {
+    tailscaleAuthPolling = false;
+  });
+  if (tailscaleCopyButton) {
+    tailscaleCopyButton.addEventListener("click", async () => {
+      const target = document.getElementById(tailscaleCopyButton.dataset.copyTarget);
+      if (!target) {
+        return;
+      }
+      try {
+        await copyText(target.textContent.trim());
+        tailscaleCopyFeedback.textContent = "Copied";
+        window.setTimeout(() => {
+          tailscaleCopyFeedback.textContent = "";
+        }, 1800);
+      } catch (error) {
+        tailscaleCopyFeedback.textContent = "Copy failed";
+      }
+    });
+  }
+  setInterval(refreshTailscaleAuthorization, 2000);
+  refreshTailscaleAuthorization();
+</script>
+{% endif %}
+{% endblock %}

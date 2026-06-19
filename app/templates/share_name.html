@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Name the SHARED DRIVE{% endblock %}
+
+{% block content %}
+<p class="lead">
+  This is the name Windows will show when you connect to the shared folder. So make it a cool & memorable one you want
+  to brag about to all your friends.
+</p>
+<form method="post" action="/share-name">
+  <label class="field">
+    <span>Share name</span>
+    <input type="text" name="share_name" value="{{ state.share_name or 'Cool Name Here' }}" autocomplete="off" required>
+  </label>
+  <p class="hint">Example: TheVault, DataTomb, BatCave</p>
+  <div class="actions split">
+    <a href="/drive-selection" class="secondary">Back</a>
+    <button type="submit">Continue</button>
+  </div>
+</form>
+{% endblock %}

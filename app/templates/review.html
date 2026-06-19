@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Review before applying{% endblock %}
+
+{% block content %}
+<p class="lead">
+  Check the setup before SamWizard makes any changes your server. After you put in a password and hit
+  <strong>"APPLY"</strong> on the next page, SAMBA will get installed and your chosen drive will be set up (or "mounted"
+  as linux likes to say).
+</p>
+<dl class="facts">
+  <div>
+    <dt>Shared location</dt>
+    <dd>{{ selected_location.name }}</dd>
+  </div>
+  <div>
+    <dt>Folder path in UBUNTU</dt>
+    <dd>{{ selected_location.mount_path or selected_location.path }}</dd>
+  </div>
+  {% if selected_location.type == "drive" %}
+  <div>
+    <dt>Drive access level</dt>
+    <dd>{{ mount_access_label(selected_location.mount_access or state.mount_access) }}</dd>
+  </div>
+  {% endif %}
+  <div>
+    <dt>Windows share name <span style="color: aliceblue;"><i>(hope you made it cool)</i></span></dt>
+    <dd>{{ state.share_name }}</dd>
+  </div>
+  <div>
+    <dt>Private username</dt>
+    <dd>{{ state.username }}</dd>
+  </div>
+  <div>
+    <dt>Password</dt>
+    <dd>
+      {% if add_drive_mode %}
+      Existing Samba password stays unchanged
+      {% else %}
+      Entered on the next screen only (SamWizard does NOT store your password)
+      {% endif %}
+    </dd>
+  </div>
+</dl>
+<div class="notice">
+  {% if add_drive_mode %}
+  The next screen will mount the selected drive, add it to the existing Samba setup, and restart Windows file sharing.
+  {% else %}
+  The next screen may install Samba, create folders, update Samba settings, mount a selected drive, and restart Windows
+  file sharing.
+  {% endif %}
+</div>
+{% if beta_enabled %}
+<div class="notice warning-panel">
+  <strong>Beta change summary:</strong>
+  SamWizard may install packages, create or verify the private Samba user, write a managed `/etc/fstab` mount block,
+  mount the selected drive at <code>{{ selected_location.mount_path or selected_location.path }}</code>, write a managed
+  Samba share block in `/etc/samba/smb.conf`, and restart Windows file sharing.
+  {% if add_drive_mode %}
+  Existing Samba user password settings stay unchanged.
+  {% endif %}
+</div>
+{% endif %}
+<form method="post" action="/review" class="actions split">
+  <a href="{{ '/share-name' if add_drive_mode else '/user-setup' }}" class="secondary">Back</a>
+  <button type="submit">Continue to apply</button>
+</form>
+{% endblock %}

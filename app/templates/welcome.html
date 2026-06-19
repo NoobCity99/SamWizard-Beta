@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Set up a private Windows file share{% endblock %}
+
+{% block content %}
+<p class="lead">
+  <strong>SamWizard</strong> checks your server first, then will walk you through setting up a private Windows file
+  shared drive you can access whenever you'd like.
+</p>
+<div class="summary">
+  <div>
+    <strong>What you will choose</strong>
+    <p>Which drive you want to access remotely, What you want to NAME that drive, and a private username and password.
+    </p>
+  </div>
+  <div>
+    <strong>What this wizard will do</strong>
+    <p>Install the App SAMBA, mount the share drive with the name you chose, and show the final Windows connection path
+      you use to access your drive.</p>
+  </div>
+  <div>
+    <strong>What is SAMBA?</strong>
+    <p>Samba is an application that manages access to folders and drives from outside the server. You can use BRAND NEW
+      external hard drives, or an existing enternal drive you've already got data on</p>
+  </div>
+  <div>
+    <strong><u>How and where can I access my drive?</u></strong>
+    <p><b>SamWizard</b> will give you the address of where to access your drive on your network. If you want to access
+      your drive from outside your home network you'll need to set up a private encrypted tunnel (So cool, right !?)
+      with
+      a service called <span style="color: blue;"><b>TAILSCALE</b></span>, which you can set up after.</p>
+  </div>
+</div>
+<form method="post" action="/start" class="actions">
+  <button type="submit">Start setup</button>
+</form>
+{% endblock %}
